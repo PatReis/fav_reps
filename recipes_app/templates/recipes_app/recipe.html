@@ -1,0 +1,113 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+<style>
+table {
+  float: center;
+  font-family: arial,
+  sans-serif;
+  border-collapse: collapse;
+  width: 50%;
+  margin: auto;
+  border: 1;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+</style>
+
+<div class="main_column">
+    <div class="topnav">
+    <a href="{{request.META.HTTP_REFERER}}">Zurück</a>
+    <a href="{% url 'update-recipe' recipe.id %}"> Bearbeiten </a>
+    <a href="{% url 'delete-recipe' recipe.id %}"> Löschen </a>
+    </div>
+
+        <div>
+
+        <h1>{{recipe.name}}</h1>
+            <p>
+                {% for x in recipe_topics%}
+                <span style="background-color:#8FBC8F; border-radius: 5px; padding: 1px;">{{x}}</span>
+                {% endfor %}
+            </p>
+        {% if recipe.image_meal %}
+            <img src="{{ recipe.image_meal.url }}" style="width: 30%; " >
+        {% endif %}
+        <p>
+            Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min,
+            Arbeitszeit: {{ recipe.expected_time_work|floatformat:"0"  }} min,
+            Koch-/Backzeit: {{ recipe.expected_time_bake|floatformat:"0"  }} min,
+            Ruhezeit: {{ recipe.expected_time_rest|floatformat:"0" }} min
+        </p>
+        <p>
+            Schwierigkeit: "{{ recipe.difficulty|default_if_none:"-" }}" mit Bewertung "{{ recipe.rating|default_if_none:"-" }}"
+        </p>
+        <p>
+            Nährwerte pro Portion: {{ recipe.nutrients_person|default_if_none:"-" }} kcal
+        </p>
+            <br>
+            <h3 id="ingredients">Zutaten:  </h3>
+
+                <form method="POST" action="#ingredients" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="id_persons">Personen:</label>
+                <input type="number" id="id_persons" name="persons" min="1" max="100" value="{{required_persons}}">
+                <input type="submit" value="Berechne" style="width: 65px;"/>
+                </form>
+                <br>
+                <table>
+                {% for value, desc in ingredients_formated %}
+                <tr>
+                  <td style="width:20%; text-align:right;">{{value}}</td>
+                  <td style="width:70%; text-align:left;">{{desc}}</td>
+                </tr>
+                {% endfor %}
+                </table>
+            <br>
+            <h3>Zubereitung:</h3>
+            <div style="text-align: left; display: inline-block; width: 65%">
+            <p>
+                {{ recipe.steps|linebreaks  }}
+            </p>
+            </div>
+            <br>
+            <h3>Tipps:</h3>
+            <div style="text-align: left; display: inline-block; width: 65%">
+            <p>
+                {{ recipe.tips|linebreaks  }}
+            </p>
+            </div>
+            <br>
+
+            <h3>Nährwerte pro Person:</h3>
+            <p>
+                {{ recipe.nutrients_table|linebreaks  }}
+            </p>
+
+            <br>
+            <br>
+
+            <p>
+                Referenz: {{ recipe.reference|default_if_none:"-"  }}
+            </p>
+            <p>
+                Erstellt vor {{ recipe.created|timesince  }},
+                geändert vor {{ recipe.updated|timesince  }}
+            </p>
+    </div>
+
+
+
+</div>
+
+{% endblock %}

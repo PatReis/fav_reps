@@ -1,0 +1,174 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial;
+  padding: 10px;
+  background: #f1f1f1;
+}
+
+/* Header/Blog Title */
+.header {
+  padding: 15px;
+  text-align: center;
+  background: white;
+  border-radius: 10px;
+}
+
+.header h1 {
+  font-size: 50px;
+}
+
+/* Style the top navigation bar */
+.topnav {
+  overflow: hidden;
+  /* background-color: #333;*/
+  background-color: #228B22;
+  border-radius: 10px;
+}
+
+/* Style the topnav links */
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  border-radius: 10px;
+}
+
+/* Change color on hover */
+.topnav a:hover {
+  /*background-color: #ddd;*/
+  background-color: #8FBC8F;
+  color: black;
+}
+
+.topnav input {
+  float: left;
+  display: block;
+  color: black;
+  width: 250px;
+  text-align: center;
+  padding: 14px 16px;
+  border-radius: 10px;
+}
+
+/* Columns */
+
+.main_column {
+  float: center;
+  width: 100%;
+  background-color: white;
+  padding: 20px 20px;
+  margin-top: 20px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.form_leftcolumn {
+  float: left;
+  width: 75%;
+  background-color: #f1f1f1;
+  border-radius: 10px;
+  padding-left: 20px;
+}
+
+.form_rightcolumn {
+  float: left;
+  width: 25%;
+  background-color: #f1f1f1;
+  padding-left: 20px;
+  border-radius: 10px;
+}
+
+/* Home column */
+.home_centercolumn{
+  float: left;
+  width: 52%;
+  background-color: #f1f1f1;
+  padding-left: 20px;
+  border-radius: 10px;
+}
+
+.home_smallcolumn {
+  float: left;
+  width: 24%;
+  background-color: #f1f1f1;
+  padding-left: 20px;
+  border-radius: 10px;
+}
+
+
+/* Fake image */
+.fakeimg {
+  background-color: #aaa;
+  width: 100%;
+  padding: 20px;
+}
+
+/* Add a card effect for articles */
+.card {
+  background-color: white;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+/* Clear floats after the columns */
+.row::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Footer */
+.footer {
+  padding: 20px;
+  text-align: center;
+  background: #ddd;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+.card_leftcolumn {
+  float: left;
+  width: 25%;
+}
+
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 800px) {
+  .form_leftcolumn {
+    width: 100%;
+    padding: 0;
+  }
+  .form_rightcolumn {
+    width: 100%;
+    padding: 0;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .home_centercolumn {
+    width: 100%;
+    padding: 0;
+  }
+  .home_smallcolumn {
+    width: 100%;
+    padding: 0;
+  }
+}
+
+/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+@media screen and (max-width: 400px) {
+  .topnav a {
+    float: none;
+    width: 100%;
+  }
+  .topnav input {
+    float: none;
+    width: 100%;
+  }
+}

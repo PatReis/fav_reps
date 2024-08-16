@@ -1,0 +1,104 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<style>
+    textarea {
+        vertical-align: top;
+        width: 100%;
+        background-color: white;
+    }
+    .card input {
+        width: 100%;
+    }
+    select {
+        width: 100%;
+        height: 1500px
+    }
+</style>
+
+<div class="row">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form_leftcolumn">
+            <div class="card">
+                <h3>{{title_of_form}}</h3>
+                <p>
+                    <label for="id_name">Name:</label>
+                    {{form.name}}
+                </p>
+                <p>
+                    <label for="id_image_meal">Bild:</label>
+                    {{form.image_meal}}
+                </p>
+                <p>
+                    <label for="id_persons">Personen:</label>
+                    {{form.persons}}
+                </p>
+                <p>
+                    <label for="id_rating">Bewertung [0 - 5 Sterne]:</label>
+                    {{form.rating}}
+                </p>
+                <p>
+                    <label for="id_ingredients">Zutaten:</label>
+                    {{form.ingredients}}
+                </p>
+                <p>
+                    <label for="id_steps">Zubereitung:</label>
+                    {{form.steps}}
+                </p>
+                <p>
+                    <label for="id_tips">Tips:</label>
+                    {{form.tips}}
+                </p>
+                <p>
+                    <label for="id_reference">Referenz:</label>
+                    {{form.reference}}
+                </p>
+                <p>
+                    <label for="id_difficulty">Schwierigkeitsgrad:</label>
+                    {{form.difficulty}}
+                </p>
+                <p>
+                    <label for="id_expected_time_total">Gesamtzeit [min]:</label>
+                    {{form.expected_time_total}}
+                </p>
+                <p>
+                    <label for="id_expected_time_work">Arbeitszeit [min]:</label>
+                    {{form.expected_time_work}}
+                </p>
+                <p>
+                    <label for="id_expected_time_bake">Koch-/Backzeit [min]:</label>
+                    {{form.expected_time_bake}}
+                </p>
+                <p>
+                    <label for="id_expected_time_rest">Ruhezeit [min]:</label>
+                    {{form.expected_time_rest}}
+                </p>
+                <p>
+                    <label for="id_nutrients_person">Nährwerte pro Portion [kcal]:</label>
+                    {{form.nutrients_person}}
+                </p>
+                <p>
+                    <label for="id_nutrients_table">Nährwerte Tabelle:</label>
+                    {{form.nutrients_table}}
+                </p>
+                <p>
+                    <input type="submit" value="Erstellen" style="width: 100px;"/>
+                </p>
+            </div>
+        </div>
+        <div class="form_rightcolumn">
+            <div class="card">
+                <label>Wähle Kategorie (mehrere):</label>
+                <br>
+                <p>{{form.topic}}</p>
+            </div>
+        </div>
+
+
+    </form>
+</div>
+
+{% endblock content %}

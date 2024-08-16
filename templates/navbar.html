@@ -1,0 +1,13 @@
+{% load static %}
+
+<div class="topnav">
+
+  <a href="{% url 'home' %}" >Home</a>
+
+  <form method="GET" action="{% url 'home' %}">
+      <input type="text" name="q" placeholder="Suche ..."/>
+  </form>
+
+  <a href="{% url 'create-recipe' %}" > Neues Rezept </a>
+
+</div>
