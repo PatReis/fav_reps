@@ -16,10 +16,10 @@ You can also access/export the database via REST API at url `/api` and `/api/rec
 Example of the website.
 
 <p align="left">
-  <img src="https://github.com/PatReis/blob/master/static/images/example_1.jpg" />
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_1.jpg" />
 </p>
 <p align="left">
-  <img src="https://github.com/PatReis/blob/master/static/images/example_2.jpg" />
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_2.jpg" />
 </p>
 
 ### Installation
