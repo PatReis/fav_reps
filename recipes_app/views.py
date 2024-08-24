@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from .models import Recipe, Topic
 from .forms import RecipeForm
 import math
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.http import HttpResponse
 
 
 def home(request):
@@ -10,7 +12,6 @@ def home(request):
     pgNr = int(request.GET.get('pgNr')) if request.GET.get('pgNr') is not None else 0
     sortdir = {"Auf": "", "Ab": "-"}[request.GET.get('srtdir')] if request.GET.get('srtdir') is not None else ""
     sortval = request.GET.get('srtval')
-
 
     max_recipes = Recipe.objects.count()
     recipes_latest = Recipe.objects.all()[:15]
@@ -81,16 +82,21 @@ def recipe(request, pk):
     return render(request, 'recipes_app/recipe.html', context)
 
 
+@login_required(login_url='user-login-required')
 def createRecipe(request):
     topics = Topic.objects.all()
 
     if request.method == 'POST':
 
         form = RecipeForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
 
-        return redirect('home')
+        if form.is_valid():
+            recipe_saved = form.save()
+
+            recipe_saved.owner = request.user
+            recipe_saved.save()
+
+            return redirect('home')
     else:
         form = RecipeForm()
 
@@ -100,6 +106,10 @@ def createRecipe(request):
 
 def updateRecipe(request, pk):
     recipe = Recipe.objects.get(id=pk)
+
+    if request.user != recipe.owner:
+        return HttpResponse('Fehlende Berechtigung! Bitte wenden Sie sich and den Administrator.')
+
     form = RecipeForm(instance=recipe)
     topics = Topic.objects.all()
 
@@ -117,6 +127,9 @@ def updateRecipe(request, pk):
 
 def deleteRecipe(request, pk):
     recipe = Recipe.objects.get(id=pk)
+
+    if request.user != recipe.owner:
+        return HttpResponse('Fehlende Berechtigung! Bitte wenden Sie sich and den Administrator.')
 
     if request.method == 'POST':
         # recipe.topic.clear()

@@ -29,11 +29,16 @@ DEBUG = True
 # Add the host IP here.
 ALLOWED_HOSTS = []
 
+# User model
+AUTH_USER_MODEL = 'user_app.User'
+
 
 # Application definition
 
 INSTALLED_APPS = [
     'recipes_app.apps.RecipesAppConfig',
+    'user_app.apps.UserAppConfig',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

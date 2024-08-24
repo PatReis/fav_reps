@@ -6,6 +6,21 @@ The website is in German and designed very minimalistic, i.e. no theme etc.
 
 Additional features that could/should be added are proper security and deployment (if publicly hosted), user authentication, comments to and rating of recipes.
 
+## Installation
+
+Installation of the python packages in your (local) environment.
+
+```bash
+pip install django>=5.0.7
+pip install Pillow>=10.4.0
+pip install djangorestframework>=3.15.2
+pip install markdown>=3.6 
+pip install django-filter>=24.3
+```
+
+And start the test-server on `http://127.0.0.1:8000/` with ``python manage.py runserver`` .
+
+
 ## Features
 
 You can upload your recipes in a form to separate entries like ingredients, cooking time, image etc.
@@ -21,20 +36,6 @@ Example of the website.
 <p align="center">
   <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_2.jpg" />
 </p>
-
-### Installation
-
-Installation of the python packages in your (local) environment.
-
-```bash
-pip install django>=5.0.7
-pip install Pillow>=10.4.0
-pip install djangorestframework>=3.15.2
-pip install markdown>=3.6 
-pip install django-filter>=24.3
-```
-
-And start the test-server on `http://127.0.0.1:8000/` with ``python manage.py runserver`` .
 
 # Serving on Raspberry Pi 
 

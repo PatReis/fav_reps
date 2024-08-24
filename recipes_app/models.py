@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from user_app.models import User
 
 
 class Topic(models.Model):
@@ -13,6 +14,8 @@ class Topic(models.Model):
 
 
 class Recipe(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
     name = models.CharField(max_length=500)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

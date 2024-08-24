@@ -28,8 +28,12 @@ tr:nth-child(even) {
 <div class="main_column">
     <div class="topnav">
     <a href="{{request.META.HTTP_REFERER}}">Zurück</a>
+        {% if request.user.is_authenticated %}
+        {% if request.user == recipe.owner %}
     <a href="{% url 'update-recipe' recipe.id %}"> Bearbeiten </a>
     <a href="{% url 'delete-recipe' recipe.id %}"> Löschen </a>
+        {% endif %}
+        {% endif %}
     </div>
 
         <div>
@@ -101,7 +105,8 @@ tr:nth-child(even) {
                 Referenz: {{ recipe.reference|default_if_none:"-"  }}
             </p>
             <p>
-                Erstellt vor {{ recipe.created|timesince  }},
+                Von <a href="{% url 'user-profile' recipe.owner.id %}" >{{recipe.owner.username|default_if_none:"Unkown"}}</a>,
+                erstellt vor {{ recipe.created|timesince  }},
                 geändert vor {{ recipe.updated|timesince  }}
             </p>
     </div>

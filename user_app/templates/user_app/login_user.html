@@ -1,0 +1,40 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+<div class="main_column">
+    <div class="topnav">
+    <a href="{{request.META.HTTP_REFERER}}">Zurück</a>
+    </div>
+
+    <div>
+        <h3>Login</h3>
+
+        {% if login_fail %}
+        <p> {{login_fail}} </p>
+        {% endif %}
+
+        <form method="POST" action="">
+        {% csrf_token %}
+
+            <p>
+        <label for="user" >Email:</label>
+        <input id="user" type="email" name="email" placeholder="beispiel@email.com" />
+            </p>
+            <p>
+        <label for="pwd">Password:</label>
+        <input id="pwd" type="password" name="password" placeholder="Passwort" />
+    </p>
+        <input type="submit" value="Login" />
+    </form>
+
+    <br><br>
+    <p>Noch nicht registriert?</p>
+    <a href="{% url 'user-register' %}">Registrieren</a>
+    </div>
+
+
+</div>
+
+{% endblock %}

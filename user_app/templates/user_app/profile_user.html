@@ -1,0 +1,44 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+<div class="main_column">
+    <div class="topnav">
+    <a href="{{request.META.HTTP_REFERER}}">Zurück</a>
+    </div>
+
+    <div>
+        <h2>{{user.username}}</h2>
+
+        {% if user.user_image %}
+            <img src="{{ user.user_image.url }}" style="width: 200px; height: 200px;" >
+        {% endif %}
+        <p>
+            {% if request.user == user %}
+                <a href="{% url 'user-update' %}">Update</a>
+            {% endif %}
+        </p>
+        <p>
+            Über Mich:
+            {% if user.biography %}
+                {{ user.biography }}
+            {% endif %}
+        </p>
+
+        <br>
+        <br>
+        <h3> Meine Rezepte:</h3>
+
+        {% for recipe in recipes %}
+        <p>
+        <a href="{% url 'recipe' recipe.id %}">{{recipe.name}}</a>
+        </p>
+        {% endfor %}
+
+    </div>
+
+
+</div>
+
+{% endblock %}

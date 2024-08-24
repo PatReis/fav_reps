@@ -1,0 +1,47 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<style>
+    textarea {
+        vertical-align: top;
+        width: 500px;
+        background-color: white;
+    }
+    input {
+        width: 300px;
+    }
+</style>
+
+<div class="main_column">
+    <div class="topnav">
+    <a href="{{request.META.HTTP_REFERER}}">Zurück</a>
+    </div>
+
+    <div style="text-align:left">
+
+        <h3>User Information</h3>
+
+         <form class="form" action="" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          {% for field in form %}
+          <div>
+              <p>
+            <label>{{field.label}}</label>
+            {{field}}
+              </p>
+          </div>
+          {% endfor %}
+            Für die Biographie, ezähle etwas über deine Erfahrungen oder Interessen beim Kochen, wenn du möchtest.
+             <p>
+            <button type="submit" value="update"> Update </button>
+            </p>
+        </form>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

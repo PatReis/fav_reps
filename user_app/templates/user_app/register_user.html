@@ -1,0 +1,46 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<style>
+    textarea {
+        vertical-align: top;
+        width: 500px;
+        background-color: white;
+    }
+    input {
+        width: 200px;
+    }
+</style>
+
+<div class="main_column">
+    <div class="topnav">
+    <a href="{{request.META.HTTP_REFERER}}">Zurück</a>
+    </div>
+
+    <div style="text-align:left">
+        {% if error_registration %}
+        <p> {{error_registration}} </p>
+        {% endif %}
+
+        <h3>Registrieren</h3>
+
+         <form method="POST" action="">
+        {% csrf_token %}
+        {{form.as_p}}
+         <p>
+            <button type="submit" value="update"> Registrieren </button>
+            </p>
+
+        </form>
+
+        <br>
+        <br>
+        <p>Bereits registriert?</p>
+        <a href="{% url 'user-login' %}">Login</a>
+    </div>
+
+
+</div>
+
+{% endblock %}

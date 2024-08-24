@@ -6,7 +6,7 @@ class RecipeForm(ModelForm):
     class Meta:
         model = Recipe
         fields = '__all__'
-        exclude = []
+        exclude = ["owner"]
         # widgets = {
         #     'name': TextInput(attrs={
         #         'class': "form-control",
