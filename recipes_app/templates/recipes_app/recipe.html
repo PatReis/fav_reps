@@ -9,7 +9,7 @@ table {
   font-family: arial,
   sans-serif;
   border-collapse: collapse;
-  width: 50%;
+  width: 60%;
   margin: auto;
   border: 1;
 }
@@ -45,7 +45,7 @@ tr:nth-child(even) {
                 {% endfor %}
             </p>
         {% if recipe.image_meal %}
-            <img src="{{ recipe.image_meal.url }}" style="width: 30%; " >
+            <img src="{{ recipe.image_meal.url }}" style="width: auto; height: 300px;" >
         {% endif %}
         <p>
             Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min,
@@ -54,7 +54,7 @@ tr:nth-child(even) {
             Ruhezeit: {{ recipe.expected_time_rest|floatformat:"0" }} min
         </p>
         <p>
-            Schwierigkeit: "{{ recipe.difficulty|default_if_none:"-" }}" mit Bewertung "{{ recipe.rating|default_if_none:"-" }}"
+            Schwierigkeit: "{{ recipe.difficulty|default_if_none:"-" }}" mit Bewertung "{{ recipe.rating_mean|default_if_none:"-" }}"
         </p>
         <p>
             Nährwerte pro Portion: {{ recipe.nutrients_person|default_if_none:"-" }} kcal
@@ -62,11 +62,10 @@ tr:nth-child(even) {
             <br>
             <h3 id="ingredients">Zutaten:  </h3>
 
-                <form method="POST" action="#ingredients" enctype="multipart/form-data">
-                {% csrf_token %}
+                <form method="GET" action="#ingredients" >
                 <label for="id_persons">Personen:</label>
                 <input type="number" id="id_persons" name="persons" min="1" max="100" value="{{required_persons}}">
-                <input type="submit" value="Berechne" style="width: 65px;"/>
+                <input type="submit" value="Berechne" style="width: 70px;"/>
                 </form>
                 <br>
                 <table>
@@ -79,14 +78,14 @@ tr:nth-child(even) {
                 </table>
             <br>
             <h3>Zubereitung:</h3>
-            <div style="text-align: left; display: inline-block; width: 65%">
+            <div style="text-align: left; display: inline-block; width: 75%">
             <p>
                 {{ recipe.steps|linebreaks  }}
             </p>
             </div>
             <br>
             <h3>Tipps:</h3>
-            <div style="text-align: left; display: inline-block; width: 65%">
+            <div style="text-align: left; display: inline-block; width: 75%">
             <p>
                 {{ recipe.tips|linebreaks  }}
             </p>
@@ -109,7 +108,33 @@ tr:nth-child(even) {
                 erstellt vor {{ recipe.created|timesince  }},
                 geändert vor {{ recipe.updated|timesince  }}
             </p>
+            <br>
+
+
+            {% if request.user.is_authenticated %}
+            <h4>Meine Bewertung</h4>
+            <form method="POST" action="" >
+                {% csrf_token %}
+            <label for="id_stars">Sterne:</label>
+            <input type="number" id="id_stars" name="stars" required min="1" max="5" value="0">
+            <label for="id_body">Text (optional):</label>
+            <input type="text" name="body" maxlength="500" id="id_body" style="width: 300px;">
+            <input type="submit" value="Bewerten" style="width: 65px;"/>
+            </form>
+            <br>
+            {% endif %}
+
+
+
+            <h4>User Bewertungen</h4>
+            {% for rate in ratings %}
+            <p>
+                {{rate.stars}} Sterne von <a href="{% url 'user-profile' rate.user.id %}" >{{rate.user.username|default_if_none:"Unkown"}}</a> : {{rate.body}}
+            </p>
+            {% endfor %}
     </div>
+
+
 
 
 

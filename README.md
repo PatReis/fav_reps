@@ -4,7 +4,9 @@ This is a toy web applications for me to learn some HTML, CSS and Django.
 It is intended to be hosted in a private network to store and manage your personal cooking recipes.
 The website is in German and designed very minimalistic, i.e. no theme etc.
 
-Additional features that could/should be added are proper security and deployment (if publicly hosted), user authentication, comments to and rating of recipes.
+Version [1.x.x](https://github.com/PatReis/fav_reps/releases/tag/v1.0.0) only features the basic recipe forms. With version 2.x.x there is also a simple user and rating system.
+
+Additional features that could/should be added are proper security and deployment (if publicly hosted).
 
 ## Installation
 
@@ -27,14 +29,18 @@ You can upload your recipes in a form to separate entries like ingredients, cook
 The recipes can be searched, sorted and also filtered by their assigned topics. They are rendered in an HTML template from the database with ingredients calculated based on the number of persons.
 Topics are to be created by the admin ``python manage.py createsuperuser`` . And by visiting the `/admin` url.
 You can also access/export the database via REST API at url `/api` and `/api/recipes` in json format.  
+In the latest version you have to create a user account to post your recipes and rate other users recipes.
 
 Example of the website.
 
 <p align="center">
-  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_1.jpg" />
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_3.jpg" />
 </p>
 <p align="center">
-  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_2.jpg" />
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_4.jpg" />
+</p>
+<p align="center">
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_5.jpg" />
 </p>
 
 # Serving on Raspberry Pi 

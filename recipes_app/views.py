@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Recipe, Topic
+from .models import Recipe, Topic, Rating
 from .forms import RecipeForm
 import math
 from django.contrib.auth.decorators import login_required
@@ -29,7 +29,7 @@ def home(request):
     recipes_count = recipes_filter.count()
 
     if sortval is not None:
-        recipes_filter = recipes_filter.order_by(sortdir + sortval)
+        recipes_filter = recipes_filter.order_by(sortdir + sortval).distinct()
 
     page_size = 50
     num_pages = math.ceil(recipes_count/page_size)
@@ -37,8 +37,8 @@ def home(request):
     recipes = recipes_filter[pgNr*page_size:(pgNr+1)*page_size] if num_pages > 0 else []
 
     recipe_best = None
-    if num_pages>0:
-        rating_values = [r.rating for r in recipes]
+    if num_pages > 0:
+        rating_values = [r.rating_mean for r in recipes]
         recipe_best = recipes[rating_values.index(max(rating_values))]
 
     context = {"recipes": recipes,
@@ -51,17 +51,11 @@ def home(request):
 
 def recipe(request, pk):
     recipe_from_key = Recipe.objects.get(id=pk)
-    recipe_fields = {getattr(recipe_from_key, field.name) for field in recipe_from_key._meta.get_fields()}
-
+    # recipe_fields = {getattr(recipe_from_key, field.name) for field in recipe_from_key._meta.get_fields() if hasattr(recipe_from_key, field.name)}
     recipe_topics = recipe_from_key.topic.all()
-
     persons_default = recipe_from_key.persons
-    if request.method == 'POST':
-        required_persons = request.POST.get("persons")
-        recompute_persons = True
-    else:
-        required_persons = persons_default
-        recompute_persons = False
+    required_persons = int(request.GET.get("persons")) if request.GET.get("persons") is not None else persons_default
+    recompute_persons = True if request.GET.get("persons") is not None else False
 
     ingredients_lines = [x.replace('\t', ' ') for x in recipe_from_key.ingredients.split('\n')]
     ingredients_formated = []
@@ -77,8 +71,34 @@ def recipe(request, pk):
         else:
             ingredients_formated.append((' ', x))
 
-    context = {"recipe": recipe_from_key, "recipe_fields": recipe_fields, "ingredients_formated": ingredients_formated,
-               "required_persons": required_persons, "recipe_topics": recipe_topics}
+    if request.method == 'POST' and request.user.is_authenticated:
+        stars = int(request.POST.get("stars")) if request.POST.get("stars") is not None else 0
+        body = request.POST.get("body")
+        if stars > 0:
+            ratings = recipe_from_key.rating_set.all()
+            has_rated = False
+            for r in ratings:
+                if request.user == r.user:
+                    r.stars = stars
+                    r.body = body
+                    r.save()
+                    has_rated = True
+                    continue
+            if not has_rated:
+                Rating.objects.create(
+                    user=request.user,
+                    recipe=recipe_from_key,
+                    stars=stars,
+                    body=body,
+                )
+
+    ratings = recipe_from_key.rating_set.all()
+    recipe_from_key.rating_count = ratings.count()
+    recipe_from_key.rating_mean = sum([r.stars for r in ratings])/float(ratings.count() if ratings.count() > 0 else 1.0)
+    recipe_from_key.save(update_fields=['rating_mean', 'rating_count'])
+
+    context = {"recipe": recipe_from_key,  "ingredients_formated": ingredients_formated,
+               "required_persons": required_persons, "recipe_topics": recipe_topics, "ratings": ratings}
     return render(request, 'recipes_app/recipe.html', context)
 
 

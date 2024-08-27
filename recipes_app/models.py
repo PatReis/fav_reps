@@ -36,10 +36,29 @@ class Recipe(models.Model):
     expected_time_rest = models.FloatField(null=True, blank=True, default=0.0)
     difficulty = models.IntegerField(null=True, blank=True, default=0)
     image_meal = models.ImageField(blank=True, upload_to="recipes")
-    rating = models.FloatField(blank=True, default=0.0)
+
+    rating_mean = models.FloatField(null=True, blank=True, default=0.0)
+    rating_count = models.IntegerField(null=True, blank=True, default=0)
 
     class Meta:
         ordering = ['-updated', '-created']
 
     def __str__(self):
         return self.name
+
+
+class Rating(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+
+    stars = models.IntegerField(default=0)
+    body = models.CharField(null=True, blank=True, max_length=500)
+
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-updated', '-created']
+
+    def __str__(self):
+        return self.body
