@@ -89,8 +89,7 @@ def createRecipe(request):
         form = RecipeForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-
-        return redirect('home')
+            return redirect('home')
     else:
         form = RecipeForm()
 
