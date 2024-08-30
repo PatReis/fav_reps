@@ -41,7 +41,7 @@ tr:nth-child(even) {
                 {% endfor %}
             </p>
         {% if recipe.image_meal %}
-            <img src="{{ recipe.image_meal.url }}" style="width: auto; height: 300px;" >
+            <img src="{{ recipe.image_meal.url }}" style="width: auto; height: 300px; max-width: 100%;" >
         {% endif %}
         <p>
             Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min,
