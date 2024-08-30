@@ -45,7 +45,7 @@ tr:nth-child(even) {
                 {% endfor %}
             </p>
         {% if recipe.image_meal %}
-            <img src="{{ recipe.image_meal.url }}" style="width: auto; height: 300px;" >
+            <img src="{{ recipe.image_meal.url }}" style="width: auto; height: 300px; max-width: 100%;" >
         {% endif %}
         <p>
             Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min,
@@ -54,7 +54,7 @@ tr:nth-child(even) {
             Ruhezeit: {{ recipe.expected_time_rest|floatformat:"0" }} min
         </p>
         <p>
-            Schwierigkeit: "{{ recipe.difficulty|default_if_none:"-" }}" mit Bewertung "{{ recipe.rating_mean|default_if_none:"-" }}"
+            Schwierigkeit: "{{ recipe.difficulty|default_if_none:"-" }}" mit Bewertung "{{ recipe.rating_mean|floatformat:"2" }}"
         </p>
         <p>
             Nährwerte pro Portion: {{ recipe.nutrients_person|default_if_none:"-" }} kcal

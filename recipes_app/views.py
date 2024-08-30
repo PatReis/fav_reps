@@ -67,6 +67,7 @@ def recipe(request, pk):
             temp_calc = temp_val[0].replace(',', '.')
             if recompute_persons:
                 temp_calc = float(temp_calc)/float(persons_default)*float(required_persons)
+                temp_calc = "{:.5f}".format(temp_calc).rstrip('0').rstrip('.')
             ingredients_formated.append((temp_calc, " ".join(temp_val[1:])))
         else:
             ingredients_formated.append((' ', x))

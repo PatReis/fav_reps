@@ -73,7 +73,7 @@
                 {% endif %}
             </div>
             <a href="{% url 'recipe' recipe.id %}">{{recipe.name}}</a>
-            <p>Schwierigkeit: {{recipe.difficulty}}, Bewertung: {{recipe.rating_mean}} </p>
+            <p>Schwierigkeit: {{recipe.difficulty}}, Bewertung: {{recipe.rating_mean|floatformat:"2"}} </p>
             <p>Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min </p>
         </div>
         {% endfor %}
@@ -107,7 +107,7 @@
             <h3>Ein Top Rezept der Seite</h3>
             {% if recipe_best %}
             <p><a href="{% url 'recipe' recipe_best.id %}">{{recipe_best.name}}</a></p>
-            <p>Schwierigkeit: {{recipe_best.difficulty}}, Bewertung: {{recipe_best.rating_mean}} </p>
+            <p>Schwierigkeit: {{recipe_best.difficulty}}, Bewertung: {{recipe_best.rating_mean|floatformat:"2"}} </p>
             <p>Gesamtzeit: {{ recipe_best.expected_time_total|floatformat:"0" }} min </p>
             {% endif %}
         </div>
