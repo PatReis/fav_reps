@@ -14,7 +14,7 @@ def home(request):
     sortval = request.GET.get('srtval')
 
     max_recipes = Recipe.objects.count()
-    recipes_latest = Recipe.objects.all()[:15]
+    recipes_latest = Recipe.objects.all()[:6]
 
     if len(q) == 0:
         recipes_filter = Recipe.objects.all()
