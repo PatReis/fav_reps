@@ -34,7 +34,7 @@ In the latest version you have to create a user account to post your recipes and
 Example of the website.
 
 <p align="center">
-  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_3.jpg" />
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_6.jpg" />
 </p>
 <p align="center">
   <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_4.jpg" />
