@@ -3,23 +3,6 @@
 {% block content %}
 
 <style>
-    .div_img_icon {
-        float: left;
-        width: 20%;
-        height: 120px;
-        margin-right: 20px;
-        padding-bottom: 10px;
-        border-radius: 10px;
-    }
-    .div_img_icon_center {
-        float: center;
-        width: 50%;
-        position: relative;
-        height: 120px;
-        margin-right: 20px;
-        padding-bottom: 10px;
-        border-radius: 10px;
-    }
     .span_green {
         background-color:#8FBC8F;
         border-radius: 5px;
@@ -63,20 +46,39 @@
             {% endif %}
             </form>
         </div>
-    </div>
-  <div class="home_centercolumn">
-        {% for recipe in recipes %}
         <div class="card">
-            <div class="div_img_icon">
-                {% if recipe.image_meal %}
-                    <img src="{{ recipe.image_meal.url }}" style="width: 100%; height: 100%;" >
-                {% endif %}
-            </div>
-            <a href="{% url 'recipe' recipe.id %}">{{recipe.name}}</a>
-            <p>Schwierigkeit: {{recipe.difficulty}}, Bewertung: {{recipe.rating_mean|floatformat:"2"}} </p>
-            <p>Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min </p>
+            <h3>Ein Top Rezept der Seite</h3>
+            {% if recipe_best %}
+            <p><a href="{% url 'recipe' recipe_best.id %}">{{recipe_best.name}}</a></p>
+            <p>Schwierigkeit: {{recipe_best.difficulty}}, Bewertung: {{recipe_best.rating_mean|floatformat:"2"}} </p>
+            <p>Gesamtzeit: {{ recipe_best.expected_time_total|floatformat:"0" }} min </p>
+            {% endif %}
         </div>
-        {% endfor %}
+        <div class="card">
+                <h3>Neuste</h3>
+                {% for recipe in recipes_latest %}
+                <a href="{% url 'recipe' recipe.id %}">{{recipe.name}}</a>
+                <br>
+                {% endfor %}
+        </div>
+    </div>
+  <div class="home_maincolumn">
+        <div class="grid-container">
+        {% for recipe in recipes %}
+            <div class="card">
+                <p>
+                    {% if recipe.image_meal %}
+                    <a href="{% url 'recipe' recipe.id %}"><img src="{{ recipe.image_meal.url }}" style="width: 100%; height: 100%;" ></a>
+                    {% endif %}
+                </p>
+                <a href="{% url 'recipe' recipe.id %}">{{recipe.name}}</a>
+                <p>Schwierigkeit: {{recipe.difficulty}}, Bewertung: {{recipe.rating_mean|floatformat:"2"}} </p>
+                <p>Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min </p>
+
+            </div>
+            {% endfor %}
+        </div>
+
         <div class="card">
             <form method="GET" action="{% url 'home' %}">
                  <label>Seite:</label>
@@ -102,23 +104,7 @@
         </div>
 
   </div>
-    <div class="home_smallcolumn">
-        <div class="card">
-            <h3>Ein Top Rezept der Seite</h3>
-            {% if recipe_best %}
-            <p><a href="{% url 'recipe' recipe_best.id %}">{{recipe_best.name}}</a></p>
-            <p>Schwierigkeit: {{recipe_best.difficulty}}, Bewertung: {{recipe_best.rating_mean|floatformat:"2"}} </p>
-            <p>Gesamtzeit: {{ recipe_best.expected_time_total|floatformat:"0" }} min </p>
-            {% endif %}
-        </div>
-        <div class="card">
-                <h3>Neuste</h3>
-                {% for recipe in recipes_latest %}
-                <a href="{% url 'recipe' recipe.id %}">{{recipe.name}}</a>
-                <br>
-                {% endfor %}
-        </div>
-    </div>
+
 </div>
 
 
