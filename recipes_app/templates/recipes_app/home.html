@@ -72,7 +72,7 @@
                     {% endif %}
                 </p>
                 <a href="{% url 'recipe' recipe.id %}">{{recipe.name}}</a>
-                <p>Schwierigkeit: {{recipe.difficulty}}, Bewertung: {{recipe.rating_mean|floatformat:"2"}} </p>
+                <p>Schwierigkeit: {{recipe.difficulty}}, Bewertung: {{recipe.rating|floatformat:"2"}} </p>
                 <p>Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min </p>
 
             </div>
