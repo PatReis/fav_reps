@@ -124,3 +124,8 @@ def deleteRecipe(request, pk):
         return redirect('home')
 
     return render(request, 'recipes_app/delete.html', {'obj': recipe})
+
+
+def downloads(request):
+    context = {}
+    return render(request, 'recipes_app/downloads.html', context)
