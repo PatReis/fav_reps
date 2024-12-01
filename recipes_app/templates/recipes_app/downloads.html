@@ -9,6 +9,12 @@
 
     <h2> Downloads </h2>
 
+     <ul style="text-align: left; position: relative">
+      <li> Zugriff auf die Datenbank über REST framework. Zum <a href="{% url 'api_overview' %}" > Überblick. </a> </li>
+      <li>Alle Rezepte als JSON über REST-API. Nachfolgend auf 'Speichern' klicken. Zum <a href="{% url 'api_recipes' %}?format=json" > Download. </a> </li>
+      <li>Alle Topics mit ID als JSON über REST-API. Nachfolgend auf 'Speichern' klicken. Zum <a href="{% url 'api_topics' %}?format=json" > Download. </a> </li>
+    </ul>
+
 </div>
 
 {% endblock content %}
