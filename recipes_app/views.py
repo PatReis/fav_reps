@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect
 from .models import Recipe, Topic
 from .forms import RecipeForm
+from .latex import create_tex_file
+from django.http import HttpResponse, HttpResponseNotFound
+from django.conf import settings
+import os
 import math
 from django.db.models import Q
 
@@ -128,4 +132,24 @@ def deleteRecipe(request, pk):
 
 def downloads(request):
     context = {}
+    context["media_url"] = str(settings.MEDIA_URL)
+    # context["zip_url"] = str(settings.MEDIA_URL) + "recipes.zip"
+    if request.method == 'POST':
+        if request.POST.get("zip_recipes"):
+            try:
+                path_to_media = os.path.realpath(settings.MEDIA_ROOT)
+                path_to_recipes = os.path.join(path_to_media, "recipes")
+                path_to_zip = os.path.join(path_to_media, "recipes.zip")
+                # os.system("cd %s && zip -FS -r recipes.zip recipes/ && cd -" % path_to_media)
+                os.system("zip -FSrj %s %s" % (path_to_zip, path_to_recipes))
+                return render(request, 'recipes_app/downloads.html', context)
+            except:
+                return HttpResponse("Error ZIP images.")
+        elif request.POST.get("compile_tex"):
+            path_to_media = os.path.realpath(settings.MEDIA_ROOT)
+            create_tex_file(path_to_media)
+            return render(request, 'recipes_app/downloads.html', context)
+        else:
+            return HttpResponseNotFound("Can not find operation for POST request.")
+
     return render(request, 'recipes_app/downloads.html', context)
