@@ -36,7 +36,17 @@ def process_name(name):
     return out
 
 
-def create_tex_file(file_path):
+def translate_diff_to_text(d):
+    if d < 0.5:
+        return "\\textit{einfach}"
+    if 0.5 <= d < 1.5:
+        return "\\textit{mittel}"
+    if d > 1.5:
+        return "\\textit{schwer}"
+    return "-"
+
+
+def create_tex_file(file_path, add_image=False):
     recipes = Recipe.objects.all()
     with open(os.path.join(file_path, "book.tex"), 'w', encoding="utf-16") as f:
         with open(os.path.join(os.path.realpath(settings.STATICFILES_DIRS[0]), "latex", "header.tex"), 'r') as h:
@@ -48,7 +58,30 @@ def create_tex_file(file_path):
             f.write(
                 "\\subsection{%s}\n" % process_name(recipe.name)
             )
-            f.write("\\textbf{Zutaten} für \\textit{%s} Personen: \\\\ \n" % recipe.persons)
+
+            f.write(
+                "Bewertung {0:.1f} ${4}$, Gesamtzeit: {1:.0f} min, Schwierigkeit: {2}, Karlorien: {3} kcal \\\\ \n".format(
+                    recipe.rating, recipe.expected_time_total,
+                    translate_diff_to_text(recipe.difficulty),
+                    int(recipe.nutrients_person) if recipe.nutrients_person > 0 else "-",
+                    "\\star"*int(recipe.rating) if 0 < recipe.rating < 6 else "-"
+                )
+            )
+
+            image_has_been_added = False
+            if add_image and recipe.image_meal is not None:
+                if len(str(recipe.image_meal)) > 0:
+                    f.write(
+                        "\\begin{figure}[H] \n \\centering \n \\includegraphics[width=0.3\\textwidth]{%s} \n \\end{figure} \n " % recipe.image_meal
+                    )
+                    image_has_been_added = True
+
+            if not image_has_been_added:
+                f.write(" \\\\ ")
+
+            f.write(
+                "\\textbf{Zutaten} für \\textit{%s} Personen: \\\\ \n" % recipe.persons
+            )
 
             if recipe.ingredients:
                 f.write(
@@ -56,7 +89,9 @@ def create_tex_file(file_path):
                 )
                 f.write("\n")
 
-            f.write("\\\\ \\textbf{Zubereitung:} \\\\ \n")
+            f.write(
+                "\\\\ \\textbf{Zubereitung:} \\\\ \n"
+            )
 
             if recipe.steps:
                 f.write(

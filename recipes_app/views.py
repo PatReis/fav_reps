@@ -147,7 +147,7 @@ def downloads(request):
                 return HttpResponse("Error ZIP images.")
         elif request.POST.get("compile_tex"):
             path_to_media = os.path.realpath(settings.MEDIA_ROOT)
-            create_tex_file(path_to_media)
+            create_tex_file(path_to_media, request.POST.get("compile_tex") == "LaTeX+Bilder")
             return render(request, 'recipes_app/downloads.html', context)
         else:
             return HttpResponseNotFound("Can not find operation for POST request.")

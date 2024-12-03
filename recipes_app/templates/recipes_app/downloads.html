@@ -20,7 +20,7 @@
       </form>
       <form method="POST" action="{% url 'downloads' %}">
           {% csrf_token %}
-         <li> Erstelle ein Buch der Rezepte mit Latex: <input type="submit" name="compile_tex" value="LaTeX"/>. Zum <a href="{{ media_url }}book.tex" > Download. </a>
+         <li> Erstelle ein Buch der Rezepte mit LateX: <input type="submit" name="compile_tex" value="LaTeX"/> oder <input type="submit" name="compile_tex" value="LaTeX+Bilder"/>. Zum <a href="{{ media_url }}book.tex" > Download. </a>
          </li>
       </form>
     </ul>
