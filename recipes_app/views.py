@@ -9,24 +9,30 @@ import math
 from django.db.models import Q
 
 
-def home(request):
-    q = request.GET.get('q') if request.GET.get('q') is not None else ''
+def home(request, pk=None):
+    q = request.GET.get('q') if request.GET.get('q') is not None else None
     pgNr = int(request.GET.get('pgNr')) if request.GET.get('pgNr') is not None else 0
     sortdir = {"Auf": "", "Ab": "-"}[request.GET.get('srtdir')] if request.GET.get('srtdir') is not None else ""
     sortval = request.GET.get('srtval')
 
-
     max_recipes = Recipe.objects.count()
-    recipes_latest = Recipe.objects.all()[:6]
+    recipes_latest = Recipe.objects.all()[:6]  # Should be sorted by date as default.
+    recipes_filter = Recipe.objects.all()
 
-    if len(q) == 0:
-        recipes_filter = Recipe.objects.all()
-    else:
-        recipes_filter = Recipe.objects.filter(
-            Q(topic__name__icontains=q) |
-            Q(name__icontains=q) |
-            Q(ingredients__icontains=q)
-        ).distinct()
+    # Start filter recipes based on query string.
+    if q is not None and isinstance(q, str):
+        if len(q) > 0:
+            words_in_search = q.split(' ')
+            for w in words_in_search:
+                if len(w) == 0:
+                    continue
+                w = w.strip()
+                recipes_filter = recipes_filter.filter(
+                    Q(topic__name__icontains=w) |
+                    Q(name__icontains=w) |
+                    Q(ingredients__icontains=w)
+                )
+                recipes_filter = recipes_filter.distinct()
 
     topics = Topic.objects.all()
     recipes_count = recipes_filter.count()

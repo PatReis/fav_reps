@@ -47,7 +47,7 @@ def translate_diff_to_text(d):
 
 
 def create_tex_file(file_path, add_image=False):
-    recipes = Recipe.objects.all()
+    recipes = Recipe.objects.all().order_by('name')
     with open(os.path.join(file_path, "book.tex"), 'w', encoding="utf-16") as f:
         with open(os.path.join(os.path.realpath(settings.STATICFILES_DIRS[0]), "latex", "header.tex"), 'r') as h:
             header = h.read()
