@@ -4,7 +4,7 @@ This is a toy web applications for me to learn some HTML, CSS and Django.
 It is intended to be hosted in a private network to store and manage your personal cooking recipes.
 The website is in German and designed very minimalistic, i.e. no theme etc.
 
-Version [1.x.x](https://github.com/PatReis/fav_reps/releases/tag/v1.0.2) only features the basic recipe forms. With version [2.x.x](https://github.com/PatReis/fav_reps/releases/tag/v2.0.0) there is also a simple user and rating system.
+Version [1.x.x](https://github.com/PatReis/fav_reps/releases/tag/v1.0.2) features the basic recipe forms and LaTeX export options for private use. With version [2.x.x](https://github.com/PatReis/fav_reps/releases/tag/v2.0.0) there is also a simple user and rating system.
 
 Additional features that could/should be added are proper security and deployment (if publicly hosted).
 
