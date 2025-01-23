@@ -72,8 +72,28 @@
                     {% endif %}
                 </p>
                 <a href="{% url 'recipe' recipe.id %}">{{recipe.name}}</a>
-                <p>Schwierigkeit: {{recipe.difficulty}}, Bewertung: {{recipe.rating|floatformat:"2"}} </p>
-                <p>Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min </p>
+                <p>
+                    {% if recipe.rating %}
+                        {% for i in '12345'|make_list  %}
+                            {% if i|add:"0" <= recipe.rating %}
+                                <span style='color:#f1c40f'>&#9733;</span>
+                            {% else %}
+                                <span>&#9733;</span>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <span>&#9733; &#9733; &#9733; &#9733; &#9733;</span>
+                    {% endif %}
+                    ({{ recipe.rating|default_if_none:"-" }}) <br>
+
+                    Schwierigkeit: {{recipe.difficulty}} <br>
+                    Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min <br>
+                    {% if  recipe.nutrients_person %}
+                        Nährwert: {{ recipe.nutrients_person|floatformat:"0" }} kcal
+                    {% else %}
+                        Nährwert: - kcal
+                    {% endif%}
+                </p>
 
             </div>
             {% endfor %}

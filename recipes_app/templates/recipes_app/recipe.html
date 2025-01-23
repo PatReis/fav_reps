@@ -50,11 +50,22 @@ tr:nth-child(even) {
             Ruhezeit: {{ recipe.expected_time_rest|floatformat:"0" }} min
         </p>
         <p>
-            Schwierigkeit: "{{ recipe.difficulty|default_if_none:"-" }}" mit Bewertung "{{ recipe.rating|default_if_none:"-" }}"
+            Schwierigkeit: "{{ recipe.difficulty|default_if_none:"-" }}" mit
+            Bewertung:
+            {% if recipe.rating %}
+                {% for i in '12345'|make_list  %}
+                    {% if i|add:"0" <= recipe.rating %}
+                        <span style='color:#f1c40f'>&#9733</span>
+                    {% else %}
+                        <span>&#9733</span>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <span>&#9733; &#9733; &#9733; &#9733; &#9733;</span>
+            {% endif %}
+            ({{ recipe.rating|default_if_none:"-" }})
         </p>
-        <p>
-            Nährwerte pro Portion: {{ recipe.nutrients_person|default_if_none:"-" }} kcal
-        </p>
+        <p>Nährwerte pro Portion: {{ recipe.nutrients_person|default_if_none:"-" }} kcal</p>
             <br>
             <h3 id="ingredients">Zutaten:  </h3>
 
