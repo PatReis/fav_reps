@@ -78,11 +78,11 @@
                             {% if i|add:"0" <= recipe.rating %}
                                 <span style='color:#f1c40f'>&#9733;</span>
                             {% else %}
-                                <span>&#9733;</span>
+                                <span style='color:#ccd1d1'>&#9733;</span>
                             {% endif %}
                         {% endfor %}
                     {% else %}
-                        <span>&#9733; &#9733; &#9733; &#9733; &#9733;</span>
+                        <span style='color:#ccd1d1'>&#9733; &#9733; &#9733; &#9733; &#9733;</span>
                     {% endif %}
                     ({{ recipe.rating|default_if_none:"-" }}) <br>
 
