@@ -7,6 +7,7 @@ from django.conf import settings
 import os
 import math
 from django.db.models import Q
+from .pagebrowser import PageBrowser
 
 
 def home(request, pk=None):
@@ -41,12 +42,19 @@ def home(request, pk=None):
         recipes_filter = recipes_filter.order_by(sortdir + sortval)
 
     page_size = 50
-    num_pages = math.ceil(recipes_count/page_size)
-    pgNr = min(max(0, pgNr), num_pages - 1)
-    recipes = recipes_filter[pgNr*page_size:(pgNr+1)*page_size] if num_pages > 0 else []
+    page_choices = 10
+    # num_pages = math.ceil(recipes_count/page_size)
+    # pgNr = min(max(0, pgNr), num_pages - 1)
+    # recipes = recipes_filter[pgNr*page_size:(pgNr+1)*page_size] if num_pages > 0 else []
+
+    browser = PageBrowser(recipes_count, page_size)
+    pgNr = browser.valid_page(pgNr)
+    num_pages = browser.number_of_pages
+    recipes = browser.get_items_for_page(recipes_filter, pgNr)
+    browser_context = browser.make_page_browser(pgNr, page_choices)
 
     recipe_best = None
-    if num_pages>0:
+    if num_pages > 0:
         rating_values = [r.rating for r in recipes]
         recipe_best = recipes[rating_values.index(max(rating_values))]
 
@@ -55,6 +63,7 @@ def home(request, pk=None):
                "pgNr": pgNr, "num_pages": num_pages, "iter_pages": [i for i in range(num_pages)],
                "topics": topics,
                "recipes_latest": recipes_latest, "recipe_best": recipe_best}
+    context.update(browser_context)
     return render(request, 'recipes_app/home.html', context)
 
 
