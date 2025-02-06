@@ -19,6 +19,44 @@ class PageBrowser:
         return list_of_items[page_index*self.items_per_page:(page_index+1)*self.items_per_page]
 
     def make_page_browser(self, page_index: int, number_page_choices: int = 10):
+        """
+        For a django template like the example below. The number is displayed from 1...N using the 'add:"1"' filter
+        but the page indices range from 0...N-1.
+
+        ```html
+        <form method="GET" action="{% url 'home' %}">
+
+            {% if page_browser_show_back is not None %}
+                <button type="submit" name="pgNr" value="{{page_browser_show_back}}">&larr; Back</button>
+            {% endif %}
+            {% if page_browser_show_start is not None %}
+                <button type="submit" name="pgNr" value="{{page_browser_show_start}}">{{page_browser_show_start|add:"1"}}</button>
+            {% endif %}
+            {% if page_browser_show_start_dots %}
+                ...
+            {% endif %}
+            {% for i in page_browser_choices_down %}
+                <button type="submit" name="pgNr" value="{{i}}">{{i|add:"1"}}</button>
+            {% endfor %}
+            {{page_browser_current_index|add:"1"}}
+            {% for i in page_browser_choices_up %}
+                <button type="submit" name="pgNr" value="{{i}}">{{i|add:"1"}}</button>
+            {% endfor %}
+            {% if page_browser_show_stop_dots %}
+                ...
+            {% endif %}
+            {% if page_browser_show_stop is not None %}
+                <button type="submit" name="pgNr" value="{{page_browser_show_stop}}">{{page_browser_show_stop|add:"1"}}</button>
+            {% endif %}
+            {% if page_browser_show_next is not None %}
+                <button type="submit" name="pgNr" value="{{page_browser_show_next}}">Next &rarr;</button>
+            {% endif %}
+
+            <!-- Hidden input... -->
+        </form>
+        ```
+
+        """
 
         page_index = self.valid_page(page_index)
         number_page_choices = max(number_page_choices, 0)
