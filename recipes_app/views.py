@@ -47,11 +47,11 @@ def home(request, pk=None):
     # pgNr = min(max(0, pgNr), num_pages - 1)
     # recipes = recipes_filter[pgNr*page_size:(pgNr+1)*page_size] if num_pages > 0 else []
 
-    browser = PageBrowser(recipes_count, page_size)
+    browser = PageBrowser(recipes_count, page_size, number_page_choices=page_choices)
     pgNr = browser.valid_page(pgNr)
     num_pages = browser.number_of_pages
     recipes = browser.get_items_for_page(recipes_filter, pgNr)
-    browser_context = browser.make_page_browser(pgNr, page_choices)
+    browser_context = browser.make_page_browser(pgNr)
 
     recipe_best = None
     if num_pages > 0:
@@ -60,7 +60,7 @@ def home(request, pk=None):
 
     context = {"recipes": recipes,
                "recipes_count": recipes_count, "max_recipes": max_recipes,
-               "pgNr": pgNr, "num_pages": num_pages, "iter_pages": [i for i in range(num_pages)],
+               "pgNr": pgNr, "num_pages": num_pages,
                "topics": topics,
                "recipes_latest": recipes_latest, "recipe_best": recipe_best}
     context.update(browser_context)
