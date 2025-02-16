@@ -50,7 +50,17 @@ tr:nth-child(even) {
             Ruhezeit: {{ recipe.expected_time_rest|floatformat:"0" }} min
         </p>
         <p>
-            Schwierigkeit: "{{ recipe.difficulty|default_if_none:"-" }}" mit
+            Schwierigkeit:
+            {% if recipe.difficulty in diff_lookup %}
+                {% for key, value in diff_lookup.items %}
+                    {% if key == recipe.difficulty %}
+                        "{{value}}"
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                "Grad {{ recipe.difficulty|default_if_none:"-" }}"
+            {% endif%}
+            mit
             Bewertung:
             {% if recipe.rating %}
                 {% for i in '12345'|make_list  %}

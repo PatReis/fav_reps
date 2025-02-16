@@ -50,8 +50,8 @@
             <h3>Ein Top Rezept der Seite</h3>
             {% if recipe_best %}
             <p><a href="{% url 'recipe' recipe_best.id %}">{{recipe_best.name}}</a></p>
-            <p>Schwierigkeit: {{recipe_best.difficulty}}, Bewertung: {{recipe_best.rating|floatformat:"2"}} </p>
-            <p>Gesamtzeit: {{ recipe_best.expected_time_total|floatformat:"0" }} min </p>
+            <p>Schwierigkeit: {{recipe_best.difficulty}}, Bewertung: {{recipe_best.rating|floatformat:"2"}} <br>
+            Gesamtzeit: {{ recipe_best.expected_time_total|floatformat:"0" }} min </p>
             {% endif %}
         </div>
         <div class="card">
@@ -86,7 +86,17 @@
                     {% endif %}
                     ({{ recipe.rating|default_if_none:"-" }}) <br>
 
-                    Schwierigkeit: {{recipe.difficulty}} <br>
+                    Schwierigkeit:
+                    {% if recipe.difficulty in diff_lookup %}
+                        {% for key, value in diff_lookup.items %}
+                        {% if key == recipe.difficulty %}
+                            {{value}}
+                        {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        Grad {{ recipe.difficulty|default_if_none:"-" }}
+                    {% endif%}
+                    <br>
                     Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min <br>
                     {% if  recipe.nutrients_person %}
                         Nährwert: {{ recipe.nutrients_person|floatformat:"0" }} kcal

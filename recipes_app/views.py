@@ -10,6 +10,9 @@ from django.db.models import Q
 from .pagebrowser import PageBrowser
 
 
+COOKING_DIFFICULTY_LOOKUP = {0: "einfach", 1: "mittel", 2: "schwer", 3: "profi"}
+
+
 def home(request, pk=None):
     q = request.GET.get('q') if request.GET.get('q') is not None else None
     pgNr = int(request.GET.get('pgNr')) if request.GET.get('pgNr') is not None else 0
@@ -61,7 +64,7 @@ def home(request, pk=None):
     context = {"recipes": recipes,
                "recipes_count": recipes_count, "max_recipes": max_recipes,
                "pgNr": pgNr, "num_pages": num_pages,
-               "topics": topics,
+               "topics": topics, "diff_lookup": COOKING_DIFFICULTY_LOOKUP,
                "recipes_latest": recipes_latest, "recipe_best": recipe_best}
     context.update(browser_context)
     return render(request, 'recipes_app/home.html', context)
@@ -97,7 +100,9 @@ def recipe(request, pk):
             ingredients_formated.append((' ', x))
 
     context = {"recipe": recipe_from_key, "recipe_fields": recipe_fields, "ingredients_formated": ingredients_formated,
-               "required_persons": required_persons, "recipe_topics": recipe_topics}
+               "required_persons": required_persons, "recipe_topics": recipe_topics,
+               "diff_lookup": COOKING_DIFFICULTY_LOOKUP,
+               }
     return render(request, 'recipes_app/recipe.html', context)
 
 
