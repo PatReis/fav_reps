@@ -49,9 +49,32 @@
         <div class="card">
             <h3>Ein Top Rezept der Seite</h3>
             {% if recipe_best %}
-            <p><a href="{% url 'recipe' recipe_best.id %}">{{recipe_best.name}}</a></p>
-            <p>Schwierigkeit: {{recipe_best.difficulty}}, Bewertung: {{recipe_best.rating|floatformat:"2"}} <br>
-            Gesamtzeit: {{ recipe_best.expected_time_total|floatformat:"0" }} min </p>
+            <p><a href="{% url 'recipe' recipe_best.id %}">{{recipe_best.name}}</a>
+            <br>
+                    {% if recipe_best.rating %}
+                        {% for i in '12345'|make_list  %}
+                            {% if i|add:"0" <= recipe_best.rating %}
+                                <span style='color:#f1c40f'>&#9733;</span>
+                            {% else %}
+                                <span style='color:#ccd1d1'>&#9733;</span>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <span style='color:#ccd1d1'>&#9733; &#9733; &#9733; &#9733; &#9733;</span>
+                    {% endif %}
+                    ({{ recipe_best.rating|default_if_none:"-" }}) <br>
+                    Schwierigkeit:
+                    {% if recipe_best.difficulty in diff_lookup %}
+                        {% for key, value in diff_lookup.items %}
+                        {% if key == recipe_best.difficulty %}
+                            {{value}},
+                        {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        Grad {{ recipe_best.difficulty|default_if_none:"-" }},
+                    {% endif%}
+                    Gesamtzeit: {{ recipe_best.expected_time_total|floatformat:"0" }} min
+                </p>
             {% endif %}
         </div>
         <div class="card">
