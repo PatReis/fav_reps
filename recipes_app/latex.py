@@ -110,9 +110,9 @@ def create_tex_file(file_path, add_image=False):
                         f.write(
                             "\\\\ \\textit{Tipp:} "
                         )
-                        if len(recipe.tips) > 750:
+                        if len(recipe.tips) > 1000:
                             f.write(
-                                process_steps(recipe.tips[:750])
+                                process_steps(recipe.tips[:1000])
                             )
                             f.write(" ($\\dots$) .")
                         else:
