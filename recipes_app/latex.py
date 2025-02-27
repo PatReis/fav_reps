@@ -114,7 +114,7 @@ def create_tex_file(file_path, add_image=False):
                             f.write(
                                 process_steps(recipe.tips[:750])
                             )
-                            f.write(" $\\dots$ .")
+                            f.write(" ($\\dots$) .")
                         else:
                             f.write(
                                 process_steps(recipe.tips)
