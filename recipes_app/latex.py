@@ -41,8 +41,10 @@ def translate_diff_to_text(d):
         return "\\textit{einfach}"
     if 0.5 <= d < 1.5:
         return "\\textit{mittel}"
-    if d > 1.5:
+    if 1.5 <= d < 2.5:
         return "\\textit{schwer}"
+    if d >= 2.5:
+        return "\\textit{profi}"
     return "-"
 
 
@@ -97,6 +99,26 @@ def create_tex_file(file_path, add_image=False):
                 f.write(
                     process_steps(recipe.steps)
                 )
+
+            if recipe.tips is not None:
+                if len(recipe.tips) > 3:
+                    if len(recipe.tips) > 2000:
+                        f.write(
+                            "\\\\ \\textit{Info:} Mehr Tipps online."
+                        )
+                    else:
+                        f.write(
+                            "\\\\ \\textit{Tipp:} "
+                        )
+                        if len(recipe.tips) > 750:
+                            f.write(
+                                process_steps(recipe.tips[:750])
+                            )
+                            f.write(" $\\dots$ .")
+                        else:
+                            f.write(
+                                process_steps(recipe.tips)
+                            )
 
             f.write("\n")
 
