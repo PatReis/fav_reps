@@ -13,7 +13,7 @@ The recipes can be searched, sorted and also filtered by their assigned topics. 
 Topics are to be created by the admin ``python manage.py createsuperuser`` . And by visiting the `/admin` url.
 You can also access/export the database via REST API at url `/api` and `/api/recipes` in json format.  
 
-Example of the website.
+## Example
 
 <p align="center">
   <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_1.jpg" />
@@ -22,7 +22,7 @@ Example of the website.
   <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_2.jpg" />
 </p>
 
-### Installation
+## Installation
 
 Installation of the python packages in your (local) environment.
 
