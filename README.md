@@ -1,10 +1,10 @@
 # Favourite Recipes
 
 This is a toy web applications for me to learn some HTML, CSS and Django.
-It is intended to be hosted in a private network to store and manage your personal cooking recipes.
-The website is in German and designed very minimalistic, i.e. no theme etc.
 
-Additional features that could/should be added are proper security and deployment (if publicly hosted), user authentication, comments to and rating of recipes.
+Version [1.x.x](https://github.com/PatReis/fav_reps/releases/tag/v1.2.1) only features the basic recipe forms. 
+It is intended to be hosted in a private network to store and manage your personal cooking recipes.
+
 
 ## Features
 
