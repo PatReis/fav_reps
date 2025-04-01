@@ -11,7 +11,7 @@ It is intended to be hosted in a private network to store and manage your person
 You can upload your recipes in a form to separate entries like ingredients, cooking time, image etc.
 The recipes can be searched, sorted and also filtered by their assigned topics. They are rendered in an HTML template from the database with ingredients calculated based on the number of persons.
 Topics are to be created by the admin ``python manage.py createsuperuser`` . And by visiting the `/admin` url.
-You can also access/export the database via REST API at url `/api` and `/api/recipes` in json format.  
+You can also access/export the database via REST API at url `/api` and `/api/recipes` in json format and further as LaTeX book.  
 
 ## Example
 
