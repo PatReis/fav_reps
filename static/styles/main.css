@@ -3,22 +3,15 @@
 }
 
 body {
-  font-family: Arial;
-  padding: 10px;
-  background: #f1f1f1;
+  font-family: Verdana, sans-serif;
+  font-size: 16px;
+  background-color: white;
 }
 
-/* Header/Blog Title */
-.header {
-  padding: 15px;
-  text-align: center;
-  background: white;
-  border-radius: 10px;
+h1, h2, h3, h4, h5, h6 {
+  font-family: Georgia, serif;
 }
 
-.header h1 {
-  font-size: 45px;
-}
 
 /* Style the top navigation bar */
 .topnav {

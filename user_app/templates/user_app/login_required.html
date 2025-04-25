@@ -2,23 +2,20 @@
 
 {% block content %}
 
-
 <div class="main_column">
     <div class="topnav">
-    <a href="{{request.META.HTTP_REFERER}}">Zurück</a>
+        <a href="{{request.META.HTTP_REFERER}}">Zurück</a>
     </div>
 
     <div>
         <h3>Login Notwendig</h3>
 
-        <p>Sie müssen sich
-            <a href="{% url 'user-login' %}">Einloggen</a>
-            oder
+        <p>
+            Sie müssen sich
+            <a href="{% url 'user-login' %}">Einloggen</a> oder
             <a href="{% url 'user-register' %}">Registrieren</a>
-        um diese Seite zu sehen bzw. zu bearbeiten.
+            um diese Seite zu sehen bzw. zu bearbeiten.
         </p>
-
-
     </div>
 
 

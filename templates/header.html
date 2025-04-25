@@ -1,0 +1,38 @@
+{% load static %}
+
+<header>
+    <div class="header-item">
+        <div class="header-title-icon">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'icons/apple-touch-icon.png' %}">
+            </a>
+        </div>
+        <div class="header-title">
+            <h1>Lieblingsrezepte</h1>
+            <p>Die besten Rezepte an einem Ort.</p>
+        </div>
+    </div>
+
+    <div class="header-item">
+        <search>
+            <form method="GET" action="{% url 'home' %}">
+                  <input type="text" name="q" placeholder="Suche ..." />
+                  <button type="submit">
+                      <svg>
+                          <circle r="30%" cx="35%" cy="35%" fill="none"  stroke="black" stroke-width="10%"/>
+                          <line x1="60%" y1="60%" x2="90%" y2="90%" style="stroke:black;stroke-width:12%" />
+                      </svg>
+                  </button>
+            </form>
+        </search>
+    </div>
+
+    <div class="header-item">
+        <div class="header-login">
+            <a href="{% url 'home' %}">Login</a>
+        </div>
+        <div class="header-user">
+
+        </div>
+    </div>
+</header>
