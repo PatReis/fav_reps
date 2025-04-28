@@ -12,116 +12,76 @@ h1, h2, h3, h4, h5, h6 {
   font-family: Georgia, serif;
 }
 
-
-/* Style the top navigation bar */
-.topnav {
-  overflow: hidden;
-  /* background-color: #333;*/
-  background-color: #228B22;
-  border-radius: 10px;
+.main-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    clear: after;
+    margin-top: 1.25em;
 }
 
-/* Style the topnav links */
-.topnav a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  border-radius: 10px;
+.main-left-column {
+    width: 25%;
 }
-
-/* Change color on hover */
-.topnav a:hover {
-  /*background-color: #ddd;*/
-  background-color: #8FBC8F;
-  color: black;
+.main-middle-column {
+    width: 50%;
+    max-width: 170em;
 }
-
-.topnav input {
-  float: left;
-  display: block;
-  color: black;
-  width: 250px;
-  text-align: center;
-  padding: 14px 16px;
-  border-radius: 10px;
-}
-
-/* Floats */
-
-.main_column {
-  float: center;
-  width: 100%;
-  background-color: white;
-  padding: 20px 20px;
-  margin-top: 20px;
-  text-align: center;
-  border-radius: 10px;
-}
-
-.form_leftcolumn {
-  float: left;
-  width: 75%;
-  background-color: #f1f1f1;
-  border-radius: 10px;
-  padding-left: 20px;
-}
-
-.form_rightcolumn {
-  float: left;
-  width: 25%;
-  background-color: #f1f1f1;
-  padding-left: 20px;
-  border-radius: 10px;
-}
-
-/* Home column */
-.home_smallcolumn {
-  float: left;
-  width: 25%;
-  background-color: #f1f1f1;
-  padding-left: 0px;
-  border-radius: 10px;
-}
-
-.home_maincolumn {
-  float: left;
-  width: 75%;
-  background-color: #f1f1f1;
-  padding-left: 20px;
-  border-radius: 10px;
-}
-
-/* Fake image */
-.fakeimg {
-  background-color: #aaa;
-  width: 100%;
-  padding: 20px;
+.main-right-column {
+    width: 25%;
 }
 
 /* Add a card effect */
 .card {
+  box-sizing: border-box;
   background-color: white;
-  padding: 20px;
-  margin-top: 20px;
   border-radius: 10px;
+  border-style: none;
+  margin-top: 2.5em;
+  margin-bottom: 4em;
+}
+
+.card search {
+    text-align: center;
+}
+
+.card search input[type=text] {
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: middle;
+    width: 30em;
+    max-width: 100%;
+    height: 3.5em;
+    border-style: solid;
+    border-radius: 1em 1em 1em 1em;
+    border-width: 0.15em;
+    border-color: black;
+    text-align: center;
+    padding: 0.4em 0.4em 0.4em 3em;
+    margin: 0.5em;
+    background-image: url('/static/icons/searchicon.png');
+    background-position: 0.7em 0.7em;
+    background-repeat: no-repeat;
+    background-size: 2em 2em;
 }
 
 .grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
-  gap: 10px;
-  background-color: #f1f1f1;
-
+  gap: 0.5em;
+  background-color: white;
+  margin-top: 1em;
+  clear: before;
+  margin-bottom: 1em;
 }
 
-/* Clear floats after the columns */
-.row::after {
-  content: "";
-  display: table;
-  clear: both;
+.grid-item {
+  background-color: white;
+  padding: 0.5em;
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 0.15em;
+  border-color: #ddd;
 }
 
 /* Footer */
@@ -135,35 +95,5 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 800px) {
-  .form_leftcolumn {
-    width: 100%;
-    padding: 0;
-  }
-  .form_rightcolumn {
-    width: 100%;
-    padding: 0;
-  }
-}
 
-@media screen and (max-width: 800px) {
-  .home_maincolumn {
-    width: 100%;
-    padding: 0;
-  }
-  .home_smallcolumn {
-    width: 100%;
-    padding: 0;
-  }
-}
-
-/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
-@media screen and (max-width: 400px) {
-  .topnav a {
-    float: none;
-    width: 100%;
-  }
-  .topnav input {
-    float: none;
-    width: 100%;
-  }
 }

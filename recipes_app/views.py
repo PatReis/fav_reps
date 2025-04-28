@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.http import HttpResponse
 
 
-def home(request):
+def recipes(request):
     q = request.GET.get('q') if request.GET.get('q') is not None else ''
     pgNr = int(request.GET.get('pgNr')) if request.GET.get('pgNr') is not None else 0
     sortdir = {"Auf": "", "Ab": "-"}[request.GET.get('srtdir')] if request.GET.get('srtdir') is not None else ""
@@ -46,8 +46,23 @@ def home(request):
                "pgNr": pgNr, "num_pages": num_pages, "iter_pages": [i for i in range(num_pages)],
                "topics": topics,
                "recipes_latest": recipes_latest, "recipe_best": recipe_best}
-    return render(request, 'recipes_app/home.html', context)
+    return render(request, 'recipes_app/recipes.html', context)
 
+
+def home(request):
+    max_recipes = Recipe.objects.count()
+    recipes_latest = Recipe.objects.all()[:6]
+    recipes_best = Recipe.objects.all()[:6]
+    topics = Topic.objects.all()
+    recipes = Recipe.objects.all()
+
+    context = {
+               "max_recipes": max_recipes,
+               "topics": topics,
+               "recipes_latest": recipes_latest,
+               "recipes_best": recipes_best
+    }
+    return render(request, 'recipes_app/home.html', context)
 
 def recipe(request, pk):
     recipe_from_key = Recipe.objects.get(id=pk)

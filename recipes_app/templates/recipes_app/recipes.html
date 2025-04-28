@@ -1,0 +1,93 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<style>
+    .span_green {
+        background-color:#8FBC8F;
+        border-radius: 5px;
+        padding-bottom: 2px;
+        padding-top: 2px;
+    }
+</style>
+
+<div class="main-container">
+
+    <div class="main-middle-column">
+
+        <div class="card">
+            <h2>Rezepte durchsuchen</h2>
+            <p>Finde das passende Rezept aus allen Rezepten der Community.</p>
+            <search>
+                <form method="GET" action="{% url 'recipes' %}">
+                      <input type="text" name="q" placeholder="Suche ..." />
+                </form>
+            </search>
+        </div>
+        <div class="card">
+            <h3>Sortieren</h3>
+            <form method="GET" action="{% url 'recipes' %}">
+                <select name="srtval" id="srtval">
+                    <option value="rating_mean">Bewertung</option>
+                    <option value="persons">Personen</option>
+                    <option value="created">Erstellt</option>
+                    <option value="updated">Geändert</option>
+                    <option value="difficulty">Schwierigkeitsgrad</option>
+                    <option value="expected_time_total">Gesamtzeit</option>
+                    <option value="nutrients_person">Nährwert (pro Portion)</option>
+                </select>
+                <input type="submit" name="srtdir" value="Auf">
+                <input type="submit" name="srtdir" value="Ab">
+
+                {% if request.GET.q %}
+                    <input type="hidden" name="q" value="{{request.GET.q|default_if_none:''}}"/>
+                {% endif %}
+            </form>
+        </div>
+
+        <div class="grid-container">
+            {% for recipe in recipes %}
+                <div class="grid-item">
+                    <p>
+                        {% if recipe.image_meal %}
+                        <a href="{% url 'recipe' recipe.id %}"><img src="{{ recipe.image_meal.url }}" style="width: 100%; height: 100%;" ></a>
+                        {% endif %}
+                    </p>
+                    <a href="{% url 'recipe' recipe.id %}">{{recipe.name}}</a>
+                    <p>Schwierigkeit: {{recipe.difficulty}}, Bewertung: {{recipe.rating_mean|floatformat:"2"}} </p>
+                    <p>Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min </p>
+
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="card">
+            <form method="GET" action="{% url 'recipes' %}">
+                 <label>Seite:</label>
+                {% for i in iter_pages %}
+                {% if i != pgNr %}
+                    <input type="submit" name="pgNr" value="{{i}}"/>
+                {% else %}
+                    {{ i }}
+                {% endif %}
+                {% endfor %}
+
+                {% if request.GET.q %}
+                <input type="hidden" name="q" value="{{request.GET.q|default_if_none:''}}"/>
+                {% endif %}
+
+                {% if request.GET.srtdir %}
+                    <input type="hidden" name="srtdir" value="{{request.GET.srtdir|default_if_none:''}}"/>
+                {% endif %}
+                {% if request.GET.srtval %}
+                    <input type="hidden" name="srtval" value="{{request.GET.srtval|default_if_none:''}}"/>
+                {% endif %}
+
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock content %}
