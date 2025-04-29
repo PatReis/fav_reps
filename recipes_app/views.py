@@ -7,6 +7,9 @@ from django.db.models import Q
 from django.http import HttpResponse
 
 
+COOKING_DIFFICULTY_LOOKUP = {0: "einfach", 1: "mittel", 2: "schwer", 3: "profi"}
+
+
 def recipes(request):
     q = request.GET.get('q') if request.GET.get('q') is not None else ''
     pgNr = int(request.GET.get('pgNr')) if request.GET.get('pgNr') is not None else 0
@@ -41,10 +44,13 @@ def recipes(request):
         rating_values = [r.rating_mean for r in recipes]
         recipe_best = recipes[rating_values.index(max(rating_values))]
 
+    sort_items = [["updated", "Geändert"], ["rating_mean", "Bewertung"], ["persons", "Personen"],
+                  ["created", "Erstellt"], ["difficulty", "Schwierigkeitsgrad"],  ["expected_time_total", "Gesamtzeit"],
+                  ["nutrients_person", "Nährwert (pro Portion)"]]
     context = {"recipes": recipes,
                "recipes_count": recipes_count, "max_recipes": max_recipes,
                "pgNr": pgNr, "num_pages": num_pages, "iter_pages": [i for i in range(num_pages)],
-               "topics": topics,
+               "topics": topics, "sort_items": sort_items, "diff_lookup": COOKING_DIFFICULTY_LOOKUP,
                "recipes_latest": recipes_latest, "recipe_best": recipe_best}
     return render(request, 'recipes_app/recipes.html', context)
 
@@ -60,7 +66,8 @@ def home(request):
                "max_recipes": max_recipes,
                "topics": topics,
                "recipes_latest": recipes_latest,
-               "recipes_best": recipes_best
+               "recipes_best": recipes_best,
+                "diff_lookup": COOKING_DIFFICULTY_LOOKUP,
     }
     return render(request, 'recipes_app/home.html', context)
 

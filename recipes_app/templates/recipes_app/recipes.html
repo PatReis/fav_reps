@@ -25,24 +25,81 @@
             </search>
         </div>
         <div class="card">
-            <h3>Sortieren</h3>
-            <form method="GET" action="{% url 'recipes' %}">
-                <select name="srtval" id="srtval">
-                    <option value="rating_mean">Bewertung</option>
-                    <option value="persons">Personen</option>
-                    <option value="created">Erstellt</option>
-                    <option value="updated">Geändert</option>
-                    <option value="difficulty">Schwierigkeitsgrad</option>
-                    <option value="expected_time_total">Gesamtzeit</option>
-                    <option value="nutrients_person">Nährwert (pro Portion)</option>
-                </select>
-                <input type="submit" name="srtdir" value="Auf">
-                <input type="submit" name="srtdir" value="Ab">
+            <div class="grid-option-container">
+                <div class="grid-option">
+                    <h3>Sortieren</h3>
+                    <form method="GET" action="{% url 'recipes' %}">
+                        <select name="srtval" id="srtval">
+                            {% for v, n in sort_items %}
+                                {% if request.GET.srtval %}
+                                    {% if request.GET.srtval == v %}
+                                        <option value="{{v}}" selected>{{n}}</option>
+                                    {% else %}
+                                        <option value="{{v}}">{{n}}</option>
+                                    {% endif %}
+                                {% else %}
+                                    <option value="{{v}}">{{n}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <input type="submit" name="srtdir" value="Auf">
+                        <input type="submit" name="srtdir" value="Ab">
 
-                {% if request.GET.q %}
-                    <input type="hidden" name="q" value="{{request.GET.q|default_if_none:''}}"/>
-                {% endif %}
-            </form>
+                        {% if request.GET.q %}
+                            <input type="hidden" name="q" value="{{request.GET.q|default_if_none:''}}"/>
+                        {% endif %}
+                        {% if request.GET.tpc %}
+                            <input type="hidden" name="tpc" value="{{request.GET.tpc|default_if_none:''}}"/>
+                        {% endif %}
+                    </form>
+                </div>
+                 <div class="grid-option">
+                    <h3>Filtern nach Kategorie</h3>
+                    <form method="GET" action="{% url 'recipes' %}">
+                        <select name="tpc" id="tpc" size="1">
+                            <option value=""> Keine </option>
+                            {% for t in topics %}
+                                {% if request.GET.tpc %}
+                                    {% if t.id|lower == request.GET.tpc %}
+                                        <option value="{{ t.id }}" selected> {{t.name}} </option>
+                                    {% else %}
+                                        <option value="{{ t.id }}" > {{t.name}} </option>
+                                    {% endif %}
+                                {% else %}
+                                    <option value="{{ t.id }}"> {{t.name}} </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="->" />
+
+                        {% if request.GET.q %}
+                            <input type="hidden" name="q" value="{{request.GET.q|default_if_none:''}}"/>
+                        {% endif %}
+                    </form>
+                </div>
+                <div class="grid-option">
+                    <h3>Rezepte pro Seite</h3>
+                    <form method="GET" action="{% url 'recipes' %}">
+                        <button type="submit" value="10" name="pgShow">10</button>
+                        <button type="submit" value="50" name="pgShow">50</button>
+                        <button type="submit" value="50" name="pgShow">100</button>
+                        <button type="submit" value="200" name="pgShow">200</button>
+
+                        {% if request.GET.q %}
+                            <input type="hidden" name="q" value="{{request.GET.q|default_if_none:''}}"/>
+                        {% endif %}
+                        {% if request.GET.tpc %}
+                            <input type="hidden" name="tpc" value="{{request.GET.tpc|default_if_none:''}}"/>
+                        {% endif %}
+                        {% if request.GET.srtdir %}
+                            <input type="hidden" name="srtdir" value="{{request.GET.srtdir|default_if_none:''}}"/>
+                        {% endif %}
+                        {% if request.GET.srtval %}
+                            <input type="hidden" name="srtval" value="{{request.GET.srtval|default_if_none:''}}"/>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
         </div>
 
         <div class="grid-container">
@@ -54,9 +111,38 @@
                         {% endif %}
                     </p>
                     <a href="{% url 'recipe' recipe.id %}">{{recipe.name}}</a>
-                    <p>Schwierigkeit: {{recipe.difficulty}}, Bewertung: {{recipe.rating_mean|floatformat:"2"}} </p>
-                    <p>Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min </p>
+                    <p>
+                        {% if recipe.rating_mean %}
+                            {% for i in '12345'|make_list  %}
+                                {% if i|add:"0" <= recipe.rating_mean %}
+                                    <span style='color:#f1c40f'>&#9733;</span>
+                                {% else %}
+                                    <span style='color:#ccd1d1'>&#9733;</span>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <span style='color:#ccd1d1'>&#9733; &#9733; &#9733; &#9733; &#9733;</span>
+                        {% endif %}
+                        ({{ recipe.rating_mean|default_if_none:"-" }}) <br>
 
+                        Schwierigkeit:
+                        {% if recipe.difficulty in diff_lookup %}
+                            {% for key, value in diff_lookup.items %}
+                            {% if key == recipe.difficulty %}
+                                {{value}}
+                            {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Grad {{ recipe.difficulty|default_if_none:"-" }}
+                        {% endif%}
+                        <br>
+                        Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min <br>
+                        {% if  recipe.nutrients_person %}
+                            Nährwert: {{ recipe.nutrients_person|floatformat:"0" }} kcal
+                        {% else %}
+                            Nährwert: - kcal
+                        {% endif%}
+                    </p>
                 </div>
             {% endfor %}
         </div>
@@ -73,14 +159,16 @@
                 {% endfor %}
 
                 {% if request.GET.q %}
-                <input type="hidden" name="q" value="{{request.GET.q|default_if_none:''}}"/>
+                    <input type="hidden" name="q" value="{{request.GET.q|default_if_none:''}}"/>
                 {% endif %}
-
                 {% if request.GET.srtdir %}
                     <input type="hidden" name="srtdir" value="{{request.GET.srtdir|default_if_none:''}}"/>
                 {% endif %}
                 {% if request.GET.srtval %}
                     <input type="hidden" name="srtval" value="{{request.GET.srtval|default_if_none:''}}"/>
+                {% endif %}
+                {% if request.GET.tpc %}
+                        <input type="hidden" name="tpc" value="{{request.GET.tpc|default_if_none:''}}"/>
                 {% endif %}
 
             </form>
