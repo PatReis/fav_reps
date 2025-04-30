@@ -5,28 +5,35 @@ import math
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponse
+from .pagination import Pagination
 
 
 COOKING_DIFFICULTY_LOOKUP = {0: "einfach", 1: "mittel", 2: "schwer", 3: "profi"}
 
 
 def recipes(request):
-    q = request.GET.get('q') if request.GET.get('q') is not None else ''
+    q = request.GET.get('q') if request.GET.get('q') is not None else None
     pgNr = int(request.GET.get('pgNr')) if request.GET.get('pgNr') is not None else 0
     sortdir = {"Auf": "", "Ab": "-"}[request.GET.get('srtdir')] if request.GET.get('srtdir') is not None else ""
     sortval = request.GET.get('srtval')
 
     max_recipes = Recipe.objects.count()
-    recipes_latest = Recipe.objects.all()[:6]
+    recipes_filter = Recipe.objects.all()
 
-    if len(q) == 0:
-        recipes_filter = Recipe.objects.all()
-    else:
-        recipes_filter = Recipe.objects.filter(
-            Q(topic__name__icontains=q) |
-            Q(name__icontains=q) |
-            Q(ingredients__icontains=q)
-        ).distinct()
+    # Start filter recipes based on query string.
+    if q is not None and isinstance(q, str):
+        if len(q) > 0:
+            words_in_search = q.split(' ')
+            for w in words_in_search:
+                if len(w) == 0:
+                    continue
+                w = w.strip()
+                recipes_filter = recipes_filter.filter(
+                    Q(topic__name__icontains=w) |
+                    Q(name__icontains=w) |
+                    Q(ingredients__icontains=w)
+                )
+                recipes_filter = recipes_filter.distinct()
 
     topics = Topic.objects.all()
     recipes_count = recipes_filter.count()
@@ -35,23 +42,28 @@ def recipes(request):
         recipes_filter = recipes_filter.order_by(sortdir + sortval).distinct()
 
     page_size = 50
-    num_pages = math.ceil(recipes_count/page_size)
-    pgNr = min(max(0, pgNr), num_pages - 1)
-    recipes = recipes_filter[pgNr*page_size:(pgNr+1)*page_size] if num_pages > 0 else []
+    page_choices = 10
+    # num_pages = math.ceil(recipes_count/page_size)
+    # pgNr = min(max(0, pgNr), num_pages - 1)
+    # recipes = recipes_filter[pgNr*page_size:(pgNr+1)*page_size] if num_pages > 0 else []
 
-    recipe_best = None
-    if num_pages > 0:
-        rating_values = [r.rating_mean for r in recipes]
-        recipe_best = recipes[rating_values.index(max(rating_values))]
+    browser = Pagination(recipes_count, page_size, number_page_choices=page_choices)
+    pgNr = browser.valid_page(pgNr)
+    num_pages = browser.number_of_pages
+    recipes = browser.get_items_for_page(recipes_filter, pgNr)
+    browser_context = browser.make_page_browser(pgNr)
 
     sort_items = [["updated", "Geändert"], ["rating_mean", "Bewertung"], ["persons", "Personen"],
                   ["created", "Erstellt"], ["difficulty", "Schwierigkeitsgrad"],  ["expected_time_total", "Gesamtzeit"],
                   ["nutrients_person", "Nährwert (pro Portion)"]]
+
     context = {"recipes": recipes,
                "recipes_count": recipes_count, "max_recipes": max_recipes,
-               "pgNr": pgNr, "num_pages": num_pages, "iter_pages": [i for i in range(num_pages)],
-               "topics": topics, "sort_items": sort_items, "diff_lookup": COOKING_DIFFICULTY_LOOKUP,
-               "recipes_latest": recipes_latest, "recipe_best": recipe_best}
+               "pgNr": pgNr, "num_pages": num_pages,
+               "topics": topics,
+               "sort_items": sort_items,
+               "diff_lookup": COOKING_DIFFICULTY_LOOKUP}
+    context.update(browser_context)
     return render(request, 'recipes_app/recipes.html', context)
 
 
