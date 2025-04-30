@@ -16,9 +16,18 @@ def recipes(request):
     pgNr = int(request.GET.get('pgNr')) if request.GET.get('pgNr') is not None else 0
     sortdir = {"Auf": "", "Ab": "-"}[request.GET.get('srtdir')] if request.GET.get('srtdir') is not None else ""
     sortval = request.GET.get('srtval')
+    tpc = request.GET.get('tpc') if request.GET.get('tpc') is not None else None
+    pgShow = int(request.GET.get('pgShow')) if request.GET.get('pgShow') is not None else 50
 
     max_recipes = Recipe.objects.count()
     recipes_filter = Recipe.objects.all()
+    topics = Topic.objects.all()
+
+    if tpc is not None:
+        try:
+            recipes_filter = Topic.objects.get(id=int(tpc)).recipe_set.all()
+        except Topic.DoesNotExist:
+            recipes_filter = Recipe.objects.all()
 
     # Start filter recipes based on query string.
     if q is not None and isinstance(q, str):
@@ -35,13 +44,12 @@ def recipes(request):
                 )
                 recipes_filter = recipes_filter.distinct()
 
-    topics = Topic.objects.all()
     recipes_count = recipes_filter.count()
 
     if sortval is not None:
         recipes_filter = recipes_filter.order_by(sortdir + sortval).distinct()
 
-    page_size = 50
+    page_size = max(min(int(pgShow), 10), 200)
     page_choices = 10
     # num_pages = math.ceil(recipes_count/page_size)
     # pgNr = min(max(0, pgNr), num_pages - 1)

@@ -2,37 +2,25 @@
 
 {% block content %}
 
-<style>
-    .span_green {
-        background-color:#8FBC8F;
-        border-radius: 5px;
-        padding-bottom: 2px;
-        padding-top: 2px;
-    }
-</style>
-
 <div class="main-container">
     <div class="main-middle-column">
 
         <div class="card">
             <h2>Rezepte</h2>
-            <p> Finde und erstelle deine Lieblingsrezepte.
+            <p> <a href="{% url 'recipes' %}">Finde</a> und <a href="{% url 'create-recipe' %}">erstelle</a> deine Lieblingsrezepte.
                 Du kannst Rezepte, die du ausprobiert hast bewerten und kommentieren sowie im Forum Tips und Tricks rund ums kochen austauschen. </p>
             <p> Du willst deine Rezepte als Buch ausdrucken? Stelle dein Kochbuch zusammen aus eigenen und Community Rezepten. </p>
         </div>
 
         <div class="card">
             <h2>Kategorien</h2>
-            <span class="span_green">
-                <a href="{% url 'home' %}" style="text-decoration: none; color: DarkSlateGray;">Alle ({{max_recipes}})</a>
-                </span>
-            <p style="line-height: 1.6">
-                {% for topic in topics %}
-            <span class="span_green">
-                <a href="{% url 'home' %}?q={{topic.name}}" style="text-decoration: none; color: DarkSlateGray;">{{topic.name}}({{topic.recipe_set.all.count}})</a>
-            </span>
-                &nbsp;
-                {% endfor %}
+                <a href="{% url 'recipes' %}" class="topic-link">Alle ({{max_recipes}})</a>
+            <p>
+            {% for topic in topics %}
+                <a href="{% url 'recipes' %}?tpc={{topic.id}}" class="topic-link">
+                    {{topic.name}}({{topic.recipe_set.all.count}})
+                </a>
+            {% endfor %}
             </p>
         </div>
 
@@ -41,7 +29,7 @@
             <div class="grid-container">
             {% for recipe in recipes_latest %}
                 <div class="grid-item">
-<p>
+                    <p>
                         {% if recipe.image_meal %}
                         <a href="{% url 'recipe' recipe.id %}"><img src="{{ recipe.image_meal.url }}" style="width: 100%; height: 100%;" ></a>
                         {% endif %}
@@ -86,7 +74,7 @@
         </div>
 
         <div class="card">
-            <h2>Die top Rezepte der Community</h2>
+            <h2>Top Rezepte der Community</h2>
             <div class="grid-container">
             {% for recipe in recipes_best %}
                 <div class="grid-item">

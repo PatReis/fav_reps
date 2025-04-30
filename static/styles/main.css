@@ -108,6 +108,16 @@ h1, h2, h3, h4, h5, h6 {
     background-color: #ddd;
 }
 
+.topic-link {
+    display: inline-block;
+    background-color:#8FBC8F;
+    border-radius: 5px;
+    padding: 0.25em;
+    margin: 0.2em;
+    color: DarkSlateGray;
+    text-decoration: none;
+}
+
 /* Footer */
 .footer {
     padding: 20px;
