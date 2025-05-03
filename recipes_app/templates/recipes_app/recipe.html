@@ -23,121 +23,310 @@ tr:nth-child(even) {
   background-color: #dddddd;
 }
 
+.side {
+  float: left;
+  width: 30%;
+  margin-top: 0.5em;
+}
+
+.middle {
+  margin-top: 0.5em;
+  float: left;
+  width: 60%;
+}
+
+/* Place text to the right */
+.right {
+  float: left;
+  width: 10%;
+  margin-top: 0.5em;
+  text-align: right;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* The bar container */
+.bar-container {
+  width: 100%;
+  background-color: #f1f1f1;
+  text-align: center;
+  color: white;
+}
+.bar {width: 0%; height: 1em; background-color: #ff9800;}
+
 </style>
 
-<div class="main_column">
-    <div class="topnav">
-    <a href="{{request.META.HTTP_REFERER}}">Zurück</a>
-        {% if request.user.is_authenticated %}
-        {% if request.user == recipe.owner %}
-    <a href="{% url 'update-recipe' recipe.id %}"> Bearbeiten </a>
-    <a href="{% url 'delete-recipe' recipe.id %}"> Löschen </a>
-        {% endif %}
-        {% endif %}
-    </div>
+<div class="main-container">
+<div class="main-middle-column">
+    <a href="{{request.META.HTTP_REFERER}}">Zurück</a><br>
 
-        <div>
+    <div class="recipe-container">
+
+        <div style="text-align: right;">
+            {% if request.user.is_authenticated %}
+                <form method="POST" action="" >
+                {% csrf_token %}
+                    {% if user_has_liked %}
+                        <button type="submit" style="color:red;" value="0" name="like"> &#10084; Liked</button>
+                    {% else %}
+                        <button type="submit" style="font-size:black" value="1" name="like"> &#9825; Like </button>
+                    {% endif %}
+                </form>
+            {% endif %}
+        </div>
+
+        <div style="text-align: left;">
+        {% if request.user.is_authenticated %}
+            {% if request.user == recipe.owner %}
+            <p>
+                <a href="{% url 'update-recipe' recipe.id %}" class="button-like"> &#9998; Bearbeiten </a>
+                <a href="{% url 'delete-recipe' recipe.id %}" class="button-like"> &#10006; Löschen </a>
+            </p>
+            {% endif %}
+        {% endif %}
+        </div>
 
         <h1>{{recipe.name}}</h1>
-            <p>
-                {% for x in recipe_topics%}
+        <p>
+            {% for x in recipe_topics%}
                 <span style="background-color:#8FBC8F; border-radius: 5px; padding: 1px;">{{x}}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {% if recipe.rating_mean %}
+                {% for i in '12345'|make_list  %}
+                    {% if i|add:"0" <= recipe.rating_mean %}
+                        <span style='color:#f1c40f'>&#9733</span>
+                    {% else %}
+                        <span style='color:#ccd1d1'>&#9733</span>
+                    {% endif %}
                 {% endfor %}
-            </p>
+            {% else %}
+                <span style='color:#ccd1d1'>&#9733; &#9733; &#9733; &#9733; &#9733;</span>
+            {% endif %}
+            ({{ recipe.rating_mean|default_if_none:"-" }})
+        </p>
         {% if recipe.image_meal %}
             <img src="{{ recipe.image_meal.url }}" style="width: auto; height: 300px; max-width: 100%;" >
         {% endif %}
         <p>
-            Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min,
-            Arbeitszeit: {{ recipe.expected_time_work|floatformat:"0"  }} min,
+             &#128337; Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min,
+            Arbeitszeit: {{ recipe.expected_time_work|floatformat:"0"  }} min <br>
             Koch-/Backzeit: {{ recipe.expected_time_bake|floatformat:"0"  }} min,
             Ruhezeit: {{ recipe.expected_time_rest|floatformat:"0" }} min
         </p>
         <p>
-            Schwierigkeit: "{{ recipe.difficulty|default_if_none:"-" }}" mit Bewertung "{{ recipe.rating_mean|floatformat:"2" }}"
+            Schwierigkeit: "{{ recipe.difficulty|default_if_none:"-" }}"
         </p>
         <p>
             Nährwerte pro Portion: {{ recipe.nutrients_person|default_if_none:"-" }} kcal
         </p>
-            <br>
-            <h3 id="ingredients">Zutaten:  </h3>
+        <br>
+        <h3 id="ingredients">Zutaten:  </h3>
 
-                <form method="GET" action="#ingredients" >
-                <label for="id_persons">Personen:</label>
-                <input type="number" id="id_persons" name="persons" min="1" max="100" value="{{required_persons}}">
-                <input type="submit" value="Berechne" style="width: 70px;"/>
-                </form>
-                <br>
-                <table>
-                {% for value, desc in ingredients_formated %}
-                <tr>
-                  <td style="width:20%; text-align:right;">{{value}}</td>
-                  <td style="width:70%; text-align:left;">{{desc}}</td>
-                </tr>
-                {% endfor %}
-                </table>
+            <form method="GET" action="#ingredients" >
+            <label for="id_persons">Personen:</label>
+            <input type="number" id="id_persons" name="persons" min="1" max="100" value="{{required_persons}}">
+            <input type="submit" value="Berechne" />
+            </form>
             <br>
-            <h3>Zubereitung:</h3>
-            <div style="text-align: left; display: inline-block; width: 75%">
-            <p>
-                {{ recipe.steps|linebreaks  }}
-            </p>
-            </div>
-            <br>
-            <h3>Tipps:</h3>
-            <div style="text-align: left; display: inline-block; width: 75%">
-            <p>
-                {{ recipe.tips|linebreaks  }}
-            </p>
-            </div>
-            <br>
+            <table>
+            {% for value, desc in ingredients_formated %}
+            <tr>
+              <td style="width:20%; text-align:right;">{{value}}</td>
+              <td style="width:70%; text-align:left;">{{desc}}</td>
+            </tr>
+            {% endfor %}
+            </table>
+        <br>
+        <h3>Zubereitung:</h3>
+        <div style="text-align: left; display: inline-block; width: 100%">
+        <p>{{ recipe.steps|linebreaks  }}</p>
+        </div>
+        <br>
+        <h3>Tipps:</h3>
+        <div style="text-align: left; display: inline-block; width: 100%">
+        <p>{{ recipe.tips|linebreaks  }}</p>
+        </div>
+        <br>
 
-            <h3>Nährwerte pro Person:</h3>
-            <p>
-                {{ recipe.nutrients_table|linebreaks  }}
-            </p>
+        <h3>Nährwerte pro Person:</h3>
+        <p>
+            {{ recipe.nutrients_table|linebreaks  }}
+        </p>
 
-            <br>
-            <br>
+        <br>
+        <br>
 
-            <p>
-                Referenz: {{ recipe.reference|default_if_none:"-"  }}
-            </p>
-            <p>
-                Von <a href="{% url 'user-profile' recipe.owner.id %}" >{{recipe.owner.username|default_if_none:"Unkown"}}</a>,
-                erstellt vor {{ recipe.created|timesince  }},
-                geändert vor {{ recipe.updated|timesince  }}
-            </p>
-            <br>
+        <p>
+            Referenz: {{ recipe.reference|default_if_none:"-"  }}
+        </p>
+        <p>
+            Von <a href="{% url 'user-profile' recipe.owner.id %}" >{{recipe.owner.username|default_if_none:"Unkown"}}</a>,
+            erstellt vor {{ recipe.created|timesince  }},
+            geändert vor {{ recipe.updated|timesince  }}
+        </p>
+        <br>
 
 
-            {% if request.user.is_authenticated %}
-            <h4>Meine Bewertung</h4>
+        {% if request.user.is_authenticated %}
+        <br>
+        <h2>Meine Bewertung</h2>
+        <div style="text-align:center; width:100%;">
             <form method="POST" action="" >
                 {% csrf_token %}
+
             <label for="id_stars">Sterne:</label>
             <input type="number" id="id_stars" name="stars" required min="1" max="5" value="0">
             <label for="id_body">Text (optional):</label>
-            <input type="text" name="body" maxlength="500" id="id_body" style="width: 300px;">
-            <input type="submit" value="Bewerten" style="width: 65px;"/>
+            <input type="text" name="body" maxlength="500" id="id_body" style="width: 300px; max-width: 75%;">
+            <input type="submit" value="Bewerten" />
             </form>
-            <br>
-            {% endif %}
+        </div>
+        <br>
+        {% endif %}
 
-
-
-            <h4>User Bewertungen</h4>
-            {% for rate in ratings %}
-            <p>
-                {{rate.stars}} Sterne von <a href="{% url 'user-profile' rate.user.id %}" >{{rate.user.username|default_if_none:"Unkown"}}</a> : {{rate.body}}
-            </p>
+        <br>
+        <h2>User Bewertungen</h2>
+        {% if recipe.rating_mean %}
+            {% for i in '12345'|make_list  %}
+                {% if i|add:"0" <= recipe.rating_mean %}
+                    <span style='color:#f1c40f'>&#9733</span>
+                {% else %}
+                    <span style='color:#ccd1d1'>&#9733</span>
+                {% endif %}
             {% endfor %}
+        {% else %}
+            <span style='color:#ccd1d1'>&#9733; &#9733; &#9733; &#9733; &#9733;</span>
+        {% endif %}
+        ({{ recipe.rating_mean|default_if_none:"-" }}) von {{ recipe.rating_count|default_if_none:"-" }} Bewertungen
+        <div class="row">
+        <div class="side">
+        <div><span style='color:#f1c40f'>&#9733; &#9733; &#9733; &#9733; &#9733;</span></div>
+        </div>
+        <div class="middle">
+        <div class="bar-container">
+          <div class="bar" style="width:{{ rating_5_per_cent }}%"></div>
+        </div>
+        </div>
+        <div class="right">
+        <div> {{recipe.rating_5}} </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="side">
+        <div><span style='color:#f1c40f'>&#9733; &#9733; &#9733; &#9733; </span><span style='color:#ccd1d1'>&#9733;</span></div>
+        </div>
+        <div class="middle">
+        <div class="bar-container">
+          <div class="bar" style="width:{{ rating_4_per_cent }}%"></div>
+        </div>
+        </div>
+        <div class="right">
+        <div>{{recipe.rating_4}}</div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="side">
+        <div><span style='color:#f1c40f'>&#9733; &#9733; &#9733; </span><span style='color:#ccd1d1'>&#9733; &#9733;</span></div>
+        </div>
+        <div class="middle">
+        <div class="bar-container">
+          <div class="bar" style="width:{{ rating_3_per_cent }}%"></div>
+        </div>
+        </div>
+        <div class=" right">
+        <div>{{recipe.rating_3}}</div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="side">
+        <div><span style='color:#f1c40f'>&#9733; &#9733; </span><span style='color:#ccd1d1'>&#9733; &#9733; &#9733;</span></div>
+        </div>
+        <div class="middle">
+        <div class="bar-container">
+          <div class="bar" style="width:{{ rating_2_per_cent }}%"></div>
+        </div>
+        </div>
+        <div class=" right">
+        <div>{{recipe.rating_2}}</div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="side">
+        <div><span style='color:#f1c40f'>&#9733; </span><span style='color:#ccd1d1'>&#9733; &#9733; &#9733; &#9733;</span></div>
+        </div>
+        <div class="middle">
+        <div class="bar-container">
+          <div class="bar" style="width:{{ rating_1_per_cent }}%"></div>
+        </div>
+        </div>
+        <div class="right">
+        <div>{{recipe.rating_1}}</div>
+        </div>
+        </div>
+
+
+        <div style="text-align:left;">
+            <br>
+        {% for rate in ratings %}
+        <p>
+            {% if rate.body %}
+                {{rate.stars}} Sterne von <a href="{% url 'user-profile' rate.user.id %}" >{{rate.user.username|default_if_none:"Unkown"}}</a>: {{rate.body}}
+            {% else %}
+                {{rate.stars}} Sterne von <a href="{% url 'user-profile' rate.user.id %}" >{{rate.user.username|default_if_none:"Unkown"}}</a>
+            {% endif %}
+        </p>
+        {% endfor %}
+        </div>
+
+
+    <div style="text-align:center;">
+
+    <form method="GET" action="{% url 'recipes' %}">
+
+        {% if page_browser_show_back is not None %}
+            <button type="submit" name="pgNr" value="{{page_browser_show_back}}">&larr; Zurück</button>
+        {% endif %}
+        {% if page_browser_show_start is not None %}
+            <button type="submit" name="pgNr" value="{{page_browser_show_start}}">{{page_browser_show_start|add:"1"}}</button>
+        {% endif %}
+        {% if page_browser_show_start_dots %}
+            ...
+        {% endif %}
+        {% for i in page_browser_choices_down %}
+            <button type="submit" name="pgNr" value="{{i}}">{{i|add:"1"}}</button>
+        {% endfor %}
+        <span class="button-display">{{page_browser_current_index|add:"1"}}<span>
+        {% for i in page_browser_choices_up %}
+            <button type="submit" name="pgNr" value="{{i}}">{{i|add:"1"}}</button>
+        {% endfor %}
+        {% if page_browser_show_stop_dots %}
+            ...
+        {% endif %}
+        {% if page_browser_show_stop is not None %}
+            <button type="submit" name="pgNr" value="{{page_browser_show_stop}}">{{page_browser_show_stop|add:"1"}}</button>
+        {% endif %}
+        {% if page_browser_show_next is not None %}
+            <button type="submit" name="pgNr" value="{{page_browser_show_next}}">Weiter &rarr;</button>
+        {% endif %}
+        <!-- Hidden input -->
+
+        {% if request.GET.persons %}
+            <input type="hidden" name="persons" value="{{request.GET.persons|default_if_none:''}}"/>
+        {% endif %}
+
+    </form>
     </div>
 
+</div>
 
-
-
-
+</div>
 </div>
 
 {% endblock %}

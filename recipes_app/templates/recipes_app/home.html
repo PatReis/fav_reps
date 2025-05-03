@@ -14,14 +14,16 @@
 
         <div class="card">
             <h2>Kategorien</h2>
+            <div class="topic-container">
                 <a href="{% url 'recipes' %}" class="topic-link">Alle ({{max_recipes}})</a>
-            <p>
-            {% for topic in topics %}
-                <a href="{% url 'recipes' %}?tpc={{topic.id}}" class="topic-link">
-                    {{topic.name}}({{topic.recipe_set.all.count}})
-                </a>
-            {% endfor %}
-            </p>
+                <p>
+                {% for topic in topics %}
+                    <a href="{% url 'recipes' %}?tpc={{topic.id}}" class="topic-link">
+                        {{topic.name}}({{topic.recipe_set.all.count}})
+                    </a>
+                {% endfor %}
+                </p>
+            </div>
         </div>
 
         <div class="card">

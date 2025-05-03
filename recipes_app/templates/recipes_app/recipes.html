@@ -20,11 +20,17 @@
             <p>Finde das passende Rezept aus allen Rezepten der Community.</p>
             <search>
                 <form method="GET" action="{% url 'recipes' %}">
-                      <input type="text" name="q" placeholder="Suche ..." />
+                      <input type="text" name="q" placeholder="Suche ..."
+                        {% if request.GET.q %}
+                            value="{{request.GET.q|default_if_none:''}}"
+                        {% endif %}
+                      />
                 </form>
             </search>
         </div>
-
+        <div style="text-align: right;">
+             <a href="{% url 'create-recipe' %}" class="button-like">&#9998; Neues Rezept </a>
+        </div>
         {% include 'recipes_app/recipes_grid.html' %}
 
     </div>

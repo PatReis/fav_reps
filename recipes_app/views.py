@@ -26,7 +26,7 @@ def recipes(request):
     if tpc is not None:
         try:
             recipes_filter = Topic.objects.get(id=int(tpc)).recipe_set.all()
-        except Topic.DoesNotExist:
+        except (Topic.DoesNotExist, ValueError):
             recipes_filter = Recipe.objects.all()
 
     # Start filter recipes based on query string.
@@ -93,30 +93,26 @@ def home(request):
 
 def recipe(request, pk):
     recipe_from_key = Recipe.objects.get(id=pk)
-    # recipe_fields = {getattr(recipe_from_key, field.name) for field in recipe_from_key._meta.get_fields() if hasattr(recipe_from_key, field.name)}
-    recipe_topics = recipe_from_key.topic.all()
     persons_default = recipe_from_key.persons
+    recipe_topics = recipe_from_key.topic.all()
     required_persons = int(request.GET.get("persons")) if request.GET.get("persons") is not None else persons_default
     recompute_persons = True if request.GET.get("persons") is not None else False
-
-    ingredients_lines = [x.replace('\t', ' ') for x in recipe_from_key.ingredients.split('\n')]
-    ingredients_formated = []
-    for x in ingredients_lines:
-        if len(x) <= 0:
-            ingredients_formated.append((' ', ' '))
-        elif x[0].isdigit():
-            temp_val = x.split(' ')
-            temp_calc = temp_val[0].replace(',', '.')
-            if recompute_persons:
-                temp_calc = float(temp_calc)/float(persons_default)*float(required_persons)
-                temp_calc = "{:.5f}".format(temp_calc).rstrip('0').rstrip('.')
-            ingredients_formated.append((temp_calc, " ".join(temp_val[1:])))
-        else:
-            ingredients_formated.append((' ', x))
+    pgShow = int(request.GET.get('pgShow')) if request.GET.get('pgShow') is not None else 50
+    pgNr = int(request.GET.get('pgNr')) if request.GET.get('pgNr') is not None else 0
 
     if request.method == 'POST' and request.user.is_authenticated:
         stars = int(request.POST.get("stars")) if request.POST.get("stars") is not None else 0
         body = request.POST.get("body")
+        like = request.POST.get("like") if request.POST.get("like") is not None else None
+
+        if like is not None:
+            if like == "1":
+                if request.user not in recipe_from_key.likes.all():
+                    recipe_from_key.likes.add(request.user)
+            else:
+                if request.user in recipe_from_key.likes.all():
+                    recipe_from_key.likes.remove(request.user)
+
         if stars > 0:
             ratings = recipe_from_key.rating_set.all()
             has_rated = False
@@ -134,14 +130,59 @@ def recipe(request, pk):
                     stars=stars,
                     body=body,
                 )
+            # Update Rating of recipes.
+            ratings = recipe_from_key.rating_set.all()
+            recipe_from_key.rating_count = ratings.count()
+            ratings_python = [r.stars for r in ratings]
+            recipe_from_key.rating_1 = sum([0.5 < r < 1.5 for r in ratings_python])
+            recipe_from_key.rating_2 = sum([1.5 < r < 2.5 for r in ratings_python])
+            recipe_from_key.rating_3 = sum([2.5 < r < 3.5 for r in ratings_python])
+            recipe_from_key.rating_4 = sum([3.5 < r < 4.5 for r in ratings_python])
+            recipe_from_key.rating_5 = sum([4.5 < r < 5.5 for r in ratings_python])
+            recipe_from_key.rating_mean = sum(ratings_python) / float(ratings.count() if ratings.count() > 0 else 1.0)
+            recipe_from_key.save(update_fields=['rating_mean', 'rating_count', "rating_1", "rating_2",
+                                                "rating_3", "rating_4", "rating_5"])
+
+    ingredients_lines = [x.replace('\t', ' ') for x in recipe_from_key.ingredients.split('\n')]
+    ingredients_formated = []
+    for x in ingredients_lines:
+        if len(x) <= 0:
+            ingredients_formated.append((' ', ' '))
+        elif x[0].isdigit():
+            temp_val = x.split(' ')
+            temp_calc = temp_val[0].replace(',', '.')
+            if recompute_persons:
+                temp_calc = float(temp_calc)/float(persons_default)*float(required_persons)
+                temp_calc = "{:.5f}".format(temp_calc).rstrip('0').rstrip('.')
+            ingredients_formated.append((temp_calc, " ".join(temp_val[1:])))
+        else:
+            ingredients_formated.append((' ', x))
+
+    if request.user.is_authenticated:
+        user_has_liked = request.user in recipe_from_key.likes.all()
+    else:
+        user_has_liked = None
+
+    rating_per_cent_context = {
+        "rating_%s_per_cent" % i: int(getattr(recipe_from_key, "rating_%s" % i) / float(recipe_from_key.rating_count if recipe_from_key.rating_count > 0 else 1.0) *100)
+        for i in range(1, 6)
+    }
 
     ratings = recipe_from_key.rating_set.all()
-    recipe_from_key.rating_count = ratings.count()
-    recipe_from_key.rating_mean = sum([r.stars for r in ratings])/float(ratings.count() if ratings.count() > 0 else 1.0)
-    recipe_from_key.save(update_fields=['rating_mean', 'rating_count'])
+    page_size = max(min(int(pgShow), 10), 200)
+    page_choices = 10
+    browser = Pagination(ratings.count(), page_size, number_page_choices=page_choices)
+    pgNr = browser.valid_page(pgNr)
+    num_pages = browser.number_of_pages
+    ratings_page = browser.get_items_for_page(ratings, pgNr)
+    browser_context = browser.make_page_browser(pgNr)
 
     context = {"recipe": recipe_from_key,  "ingredients_formated": ingredients_formated,
-               "required_persons": required_persons, "recipe_topics": recipe_topics, "ratings": ratings}
+               "required_persons": required_persons, "recipe_topics": recipe_topics, "ratings": ratings_page,
+               "user_has_liked": user_has_liked}
+    context.update(browser_context)
+    context.update(rating_per_cent_context)
+    print(context)
     return render(request, 'recipes_app/recipe.html', context)
 
 

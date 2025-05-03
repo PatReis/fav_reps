@@ -139,7 +139,7 @@
         {% for i in page_browser_choices_down %}
             <button type="submit" name="pgNr" value="{{i}}">{{i|add:"1"}}</button>
         {% endfor %}
-        <span class="button-like">{{page_browser_current_index|add:"1"}}<span>
+        <span class="button-display">{{page_browser_current_index|add:"1"}}<span>
         {% for i in page_browser_choices_up %}
             <button type="submit" name="pgNr" value="{{i}}">{{i|add:"1"}}</button>
         {% endfor %}

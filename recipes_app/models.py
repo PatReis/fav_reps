@@ -16,6 +16,7 @@ class Topic(models.Model):
 class Recipe(models.Model):
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
+    likes = models.ManyToManyField(User,  blank=True, related_name="likes")
     name = models.CharField(max_length=500)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -39,6 +40,11 @@ class Recipe(models.Model):
 
     rating_mean = models.FloatField(null=True, blank=True, default=0.0)
     rating_count = models.IntegerField(null=True, blank=True, default=0)
+    rating_1 = models.IntegerField(null=True, blank=True, default=0)
+    rating_2 = models.IntegerField(null=True, blank=True, default=0)
+    rating_3 = models.IntegerField(null=True, blank=True, default=0)
+    rating_4 = models.IntegerField(null=True, blank=True, default=0)
+    rating_5 = models.IntegerField(null=True, blank=True, default=0)
 
     class Meta:
         ordering = ['-updated', '-created']
