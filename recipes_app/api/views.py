@@ -2,8 +2,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from ..models import Recipe, Topic
 from .serializers import RecipeSerializer, TopicSerializer
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 
 
+@login_required(login_url='user-login-required')
 @api_view(['GET'])
 def getRoutes(request):
     routes = [
@@ -15,20 +18,27 @@ def getRoutes(request):
     return Response(routes)
 
 
+@login_required(login_url='user-login-required')
 @api_view(['GET'])
 def getRecipes(request):
-    rooms = Recipe.objects.all()
-    serializer = RecipeSerializer(rooms, many=True)
+    r = request.user.recipe_set.all()
+    serializer = RecipeSerializer(r, many=True)
     return Response(serializer.data)
 
 
+@login_required(login_url='user-login-required')
 @api_view(['GET'])
 def getRecipe(request, pk):
-    room = Recipe.objects.get(id=pk)
-    serializer = RecipeSerializer(room, many=False)
+
+    recipe = Recipe.objects.get(id=pk)
+    if request.user != recipe.owner:
+        return HttpResponse('Fehlende Berechtigung! Bitte wenden Sie sich and den Administrator.')
+
+    serializer = RecipeSerializer(recipe, many=False)
     return Response(serializer.data)
 
 
+@login_required(login_url='user-login-required')
 @api_view(['GET'])
 def getTopics(request):
     topics = Topic.objects.all()

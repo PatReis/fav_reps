@@ -126,7 +126,7 @@
     <div class="grid-option" style="text-align:center;">
 
     <form method="GET" action="{% url 'recipes' %}">
-
+        Seiten:
         {% if page_browser_show_back is not None %}
             <button type="submit" name="pgNr" value="{{page_browser_show_back}}">&larr; Zurück</button>
         {% endif %}
@@ -139,7 +139,7 @@
         {% for i in page_browser_choices_down %}
             <button type="submit" name="pgNr" value="{{i}}">{{i|add:"1"}}</button>
         {% endfor %}
-        <span class="button-display">{{page_browser_current_index|add:"1"}}<span>
+        <span class="button-display"><u>{{page_browser_current_index|add:"1"}}</u><span>
         {% for i in page_browser_choices_up %}
             <button type="submit" name="pgNr" value="{{i}}">{{i|add:"1"}}</button>
         {% endfor %}

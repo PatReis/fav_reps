@@ -158,6 +158,8 @@ def recipe(request, pk):
         else:
             ingredients_formated.append((' ', x))
 
+    likes_count = recipe_from_key.likes.count()
+
     if request.user.is_authenticated:
         user_has_liked = request.user in recipe_from_key.likes.all()
     else:
@@ -179,7 +181,7 @@ def recipe(request, pk):
 
     context = {"recipe": recipe_from_key,  "ingredients_formated": ingredients_formated,
                "required_persons": required_persons, "recipe_topics": recipe_topics, "ratings": ratings_page,
-               "user_has_liked": user_has_liked}
+               "user_has_liked": user_has_liked, "likes_count": likes_count, "diff_lookup": COOKING_DIFFICULTY_LOOKUP}
     context.update(browser_context)
     context.update(rating_per_cent_context)
     print(context)
@@ -240,4 +242,4 @@ def deleteRecipe(request, pk):
         recipe.delete()
         return redirect('home')
 
-    return render(request, 'recipes_app/delete.html', {'obj': recipe})
+    return render(request, 'recipes_app/recipe_delete.html', {'obj': recipe})

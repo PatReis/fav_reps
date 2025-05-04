@@ -22,13 +22,18 @@ h1, h2, h3, h4, h5, h6 {
 
 .main-left-column {
     width: 25%;
+    max-width: 100em;
+    margin: 2em;
 }
 .main-middle-column {
     width: 50%;
-    max-width: 170em;
+    max-width: 200em;
+    margin: 2em;
 }
 .main-right-column {
     width: 25%;
+    max-width: 100em;
+    margin: 2em;
 }
 
 /* Add a card effect */
@@ -95,7 +100,7 @@ h1, h2, h3, h4, h5, h6 {
     margin: 1em;
 }
 
-button, input[type=submit], input[type=number], input[type=text], select, .button-like, .button-display {
+button, input[type=submit], input[type=password], input[type=email], input[type=number], input[type=text], select, .button-like, .button-display {
     background-color: white;
     padding: 0.35em;
     border: solid;

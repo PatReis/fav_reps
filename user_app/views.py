@@ -62,9 +62,15 @@ def updateUser(request):
         form = UserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
-            return redirect('user-profile', pk=user.id)
+            return redirect('user-account', pk=user.id)
 
     return render(request, 'user_app/update_user.html', {'form': form})
+
+@login_required(login_url='user-login-required')
+def userAccount(request):
+    user = request.user
+    context = {"user": user}
+    return render(request, 'user_app/account_user.html', context)
 
 
 def userProfile(request, pk):

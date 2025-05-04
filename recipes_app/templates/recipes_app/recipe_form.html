@@ -17,11 +17,12 @@
     }
 </style>
 
-<div class="row">
-    <form method="POST" action="" enctype="multipart/form-data">
-        {% csrf_token %}
+<form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
 
-        <div class="form_leftcolumn">
+<div class="main-container">
+
+        <div class="main-middle-column">
             <div class="card">
                 <h3>{{title_of_form}}</h3>
                 <p>
@@ -85,16 +86,15 @@
                 </p>
             </div>
         </div>
-        <div class="form_rightcolumn">
+        <div class="main-right-column">
             <div class="card">
                 <label>Wähle Kategorie (mehrere):</label>
                 <br>
                 <p>{{form.topic}}</p>
             </div>
         </div>
-
-
-    </form>
 </div>
+</form>
+
 
 {% endblock content %}

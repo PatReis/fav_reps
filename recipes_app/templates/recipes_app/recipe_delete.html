@@ -2,10 +2,12 @@
 
 {% block content %}
 
-<div class="main_column">
-    <div class="topnav">
-    <a href="{{request.META.HTTP_REFERER}}">Zurück</a>
-    </div>
+<div class="main-container">
+<div class="main-middle-column" style="margin-bottom:20em;">
+
+<div class="topnav">
+<a href="{{request.META.HTTP_REFERER}}">Zurück</a>
+</div>
 
 <form method="POST" action="">
     {% csrf_token %}
@@ -14,6 +16,7 @@
 
     <input type="submit" value="Ja, bitte löschen." />
 </form>
-    </div>
+</div>
+</div>
 
 {% endblock content %}

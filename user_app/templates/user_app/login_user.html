@@ -3,7 +3,8 @@
 {% block content %}
 
 
-<div class="main_column">
+<div class="main-container">
+<div class="main-middle-column" style="margin-bottom:10em;">
     <div class="topnav">
     <a href="{{request.META.HTTP_REFERER}}">Zurück</a>
     </div>
@@ -31,10 +32,10 @@
 
     <br><br>
     <p>Noch nicht registriert?</p>
-    <a href="{% url 'user-register' %}">Registrieren</a>
+    <a href="{% url 'user-register' %}" class="button-like">Registrieren</a>
     </div>
 
-
+</div>
 </div>
 
 {% endblock %}

@@ -109,7 +109,7 @@ tr:nth-child(even) {
             {% else %}
                 <span style='color:#ccd1d1'>&#9733; &#9733; &#9733; &#9733; &#9733;</span>
             {% endif %}
-            ({{ recipe.rating_mean|default_if_none:"-" }})
+            ({{ recipe.rating_mean|default_if_none:"-" }}) and <span style="color:red;">&#10084;</span> ({{ likes_count }})
         </p>
         {% if recipe.image_meal %}
             <img src="{{ recipe.image_meal.url }}" style="width: auto; height: 300px; max-width: 100%;" >
@@ -121,7 +121,16 @@ tr:nth-child(even) {
             Ruhezeit: {{ recipe.expected_time_rest|floatformat:"0" }} min
         </p>
         <p>
-            Schwierigkeit: "{{ recipe.difficulty|default_if_none:"-" }}"
+            Schwierigkeit:
+            {% if recipe.difficulty in diff_lookup %}
+                {% for key, value in diff_lookup.items %}
+                {% if key == recipe.difficulty %}
+                    {{value}}
+                {% endif %}
+                {% endfor %}
+            {% else %}
+                Grad {{ recipe.difficulty|default_if_none:"-" }}
+            {% endif%}
         </p>
         <p>
             Nährwerte pro Portion: {{ recipe.nutrients_person|default_if_none:"-" }} kcal
@@ -289,7 +298,7 @@ tr:nth-child(even) {
     <div style="text-align:center;">
 
     <form method="GET" action="{% url 'recipes' %}">
-
+        Seiten:
         {% if page_browser_show_back is not None %}
             <button type="submit" name="pgNr" value="{{page_browser_show_back}}">&larr; Zurück</button>
         {% endif %}
@@ -300,9 +309,9 @@ tr:nth-child(even) {
             ...
         {% endif %}
         {% for i in page_browser_choices_down %}
-            <button type="submit" name="pgNr" value="{{i}}">{{i|add:"1"}}</button>
+        <button type="submit" name="pgNr" value="{{i}}">{{i|add:"1"}}</button>
         {% endfor %}
-        <span class="button-display">{{page_browser_current_index|add:"1"}}</span>
+        <span class="button-display"><u>{{page_browser_current_index|add:"1"}}</u></span>
         {% for i in page_browser_choices_up %}
             <button type="submit" name="pgNr" value="{{i}}">{{i|add:"1"}}</button>
         {% endfor %}

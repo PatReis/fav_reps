@@ -2,7 +2,8 @@
 
 {% block content %}
 
-<div class="main_column">
+<div class="main-container">
+<div class="main-middle-column" style="margin-bottom:10em;">
     <div class="topnav">
         <a href="{{request.META.HTTP_REFERER}}">Zurück</a>
     </div>
@@ -12,13 +13,12 @@
 
         <p>
             Sie müssen sich
-            <a href="{% url 'user-login' %}">Einloggen</a> oder
-            <a href="{% url 'user-register' %}">Registrieren</a>
+            <a href="{% url 'user-login' %}" class="button-like">Einloggen</a> oder
+            <a href="{% url 'user-register' %}" class="button-like">Registrieren</a>
             um diese Seite zu sehen bzw. zu bearbeiten.
         </p>
     </div>
-
-
+</div>
 </div>
 
 {% endblock %}

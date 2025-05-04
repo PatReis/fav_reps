@@ -34,7 +34,7 @@
         </div>
         <div class="header-user">
             {% if request.user.is_authenticated %}
-                <a href="{% url 'user-profile' user.id %}">
+                <a href="{% url 'user-account' %}">
             {% else %}
                 <a href="{% url 'user-login' %}" >
             {% endif %}
