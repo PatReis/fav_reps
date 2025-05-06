@@ -15,9 +15,10 @@
 
 <div class="main-container">
 <div class="main-middle-column" style="margin-bottom:10em;">
-    <div class="topnav">
-    <a href="{{request.META.HTTP_REFERER}}">Zurück</a>
-    </div>
+    <ul class="breadcrumb">
+        <li><a href="{{request.META.HTTP_REFERER}}">Zurück</a></li>
+        <li>Neuer Benutzer</li>
+    </ul>
 
     <div style="text-align:left">
         {% if error_registration %}
@@ -38,7 +39,7 @@
         <br>
         <br>
         <p>Bereits registriert?</p>
-        <a href="{% url 'user-login' %}">Login</a>
+        <a href="{% url 'user-login' %}" class="button-like">Login</a>
     </div>
 
 </div>

@@ -12,5 +12,8 @@ class User(AbstractUser):
 
     user_image = models.ImageField(null=True, default="users/avatar.jpg", upload_to="users")
 
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']

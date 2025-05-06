@@ -154,6 +154,44 @@ button:hover, input[type=submit]:hover, .button-like:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+ /* Style the list */
+ul.breadcrumb {
+  padding: 0.5em 1em;
+  list-style: none;
+  background-color: white;
+}
+
+/* Display list items side by side */
+ul.breadcrumb li {
+  display: inline;
+  font-size: 1em;
+}
+
+/* Add a slash symbol (/) before/behind each list item */
+ul.breadcrumb li:not(:first-child)+li:before {
+  padding: 0.5em;
+  color: black;
+  content: "/\00a0";
+}
+ul.breadcrumb li:first-child:after {
+  padding: 0.5em;
+  color: black;
+  content: "|";
+}
+
+
+/* Add a color to all links inside the list */
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+
+/* Add a color on mouse-over */
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
+
 
 /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 800px) {

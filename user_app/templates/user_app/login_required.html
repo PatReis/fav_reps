@@ -4,9 +4,13 @@
 
 <div class="main-container">
 <div class="main-middle-column" style="margin-bottom:10em;">
-    <div class="topnav">
-        <a href="{{request.META.HTTP_REFERER}}">Zurück</a>
-    </div>
+
+    <ul class="breadcrumb">
+        <li><a href="{{request.META.HTTP_REFERER}}">Zurück</a></li>
+        <li><a href="{% url 'user-login' %}">Login</a></li>
+        <li>Login Required</li>
+    </ul>
+
 
     <div>
         <h3>Login Notwendig</h3>

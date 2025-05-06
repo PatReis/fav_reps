@@ -14,6 +14,10 @@
 <div class="main-container">
 
     <div class="main-middle-column">
+        <ul class="breadcrumb">
+          <li><a href="{{request.META.HTTP_REFERER}}">Zurück</a></li>
+          <li>Rezepte</li>
+        </ul>
 
         <div class="card">
             <h2>Rezepte durchsuchen</h2>
@@ -31,6 +35,7 @@
         <div style="text-align: right;">
              <a href="{% url 'create-recipe' %}" class="button-like">&#9998; Neues Rezept </a>
         </div>
+
         {% include 'recipes_app/recipes_grid.html' %}
 
     </div>

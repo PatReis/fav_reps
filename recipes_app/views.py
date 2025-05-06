@@ -25,9 +25,10 @@ def recipes(request):
 
     if tpc is not None:
         try:
-            recipes_filter = Topic.objects.get(id=int(tpc)).recipe_set.all()
+            # recipes_filter = Topic.objects.get(id=int(tpc)).recipe_set.all()
+            recipes_filter = recipes_filter.filter(topic__id=int(tpc)).distinct()
         except (Topic.DoesNotExist, ValueError):
-            recipes_filter = Recipe.objects.all()
+            pass
 
     # Start filter recipes based on query string.
     if q is not None and isinstance(q, str):
@@ -40,6 +41,7 @@ def recipes(request):
                 recipes_filter = recipes_filter.filter(
                     Q(topic__name__icontains=w) |
                     Q(name__icontains=w) |
+                    Q(owner__username__icontains=w) |
                     Q(ingredients__icontains=w)
                 )
                 recipes_filter = recipes_filter.distinct()
@@ -184,7 +186,6 @@ def recipe(request, pk):
                "user_has_liked": user_has_liked, "likes_count": likes_count, "diff_lookup": COOKING_DIFFICULTY_LOOKUP}
     context.update(browser_context)
     context.update(rating_per_cent_context)
-    print(context)
     return render(request, 'recipes_app/recipe.html', context)
 
 

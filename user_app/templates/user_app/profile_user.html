@@ -5,20 +5,26 @@
 
 <div class="main-container">
 <div class="main-middle-column" style="margin-bottom:10em;">
-    <div class="topnav">
-    <a href="{{request.META.HTTP_REFERER}}">Zurück</a>
-    </div>
+    <ul class="breadcrumb">
+        <li><a href="{{request.META.HTTP_REFERER}}">Zurück</a></li>
+        <li>Profil: {{user.username}}</li>
+    </ul>
 
     <div style="text-align:center;">
-        <h2>{{user.username}}</h2>
+        <h2>Pofil von {{user.username}}</h2>
+
+        {% if request.user == user %}
+        <div style="text-align: right;">
+            <a href="{% url 'user-update' %}" class="button-like">&#9998; Update</a>
+            <a href="{% url 'user-account' %}" class="button-like">&#9776; Account</a>
+        </div>
+        {% endif %}
 
         {% if user.user_image %}
             <img src="{{ user.user_image.url }}" style="width: 200px; height: 200px;" >
         {% endif %}
         <p>
-            {% if request.user == user %}
-                <a href="{% url 'user-update' %}">Update</a>
-            {% endif %}
+
         </p>
         <p>
             Über Mich:
@@ -28,14 +34,14 @@
         </p>
 
         <br>
+        <p>Mitglied bei Lieblingsrezepten seit {{user.created}} </p>
+        <p>Hat insgesamt {{user.recipe_set.all.count}} Rezepte erstellt und {{user.likes.all.count|default_if_none:"0"}} Rezepte geliked.</p>
         <br>
-        <h3> Meine Rezepte:</h3>
-
-        {% for recipe in recipes %}
-        <p>
-        <a href="{% url 'recipe' recipe.id %}">{{recipe.name}}</a>
-        </p>
-        {% endfor %}
+        <div style="text-align:left;">
+        <form method="GET" action="{% url 'recipes' %}">
+              <button type="submit" name="q" value={{user.username}}>&#8618; Zu den Rezepten von {{user.username}}</button>
+        </form>
+        </div>
 
     </div>
 

@@ -6,18 +6,21 @@
 <div class="main-container">
 <div class="main-middle-column" style="margin-bottom:10em;">
 
-    <div class="topnav">
-    <a href="{{request.META.HTTP_REFERER}}">Zurück</a>
-    </div>
+    <ul class="breadcrumb">
+      <li><a href="{{request.META.HTTP_REFERER}}">Zurück</a></li>
+      <li>Account</li>
+    </ul>
+
 
     <div>
         <h1>Accountverwaltung </h1>
         <h2> von {{user.username}}</h2>
 
        <ul style="line-height:2;">
+            <li><a href="{% url 'create-recipe' %}">Neues Rezept </a></li>
             <li><a href="{% url 'user-update' %}">Angaben ergänzen<a></li>
             <li><a href="{% url 'user-profile' user.id %}">User Seite ansehen<a></li>
-            <li>Meine Rezepte</li>
+            <li><a href="{% url 'recipes' %}?q={{user.username|urlencode}}">Meine Rezepte</a></li>
             <li>Meine Likes</li>
             <li>Meine Bewertungen</li>
             <li><a href="/api/recipes">Export meiner Rezepte</a></li>

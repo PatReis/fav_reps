@@ -18,25 +18,33 @@ class Recipe(models.Model):
 
     likes = models.ManyToManyField(User,  blank=True, related_name="likes")
     name = models.CharField(max_length=500)
+
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
     topic = models.ManyToManyField(Topic, blank=True)
 
     persons = models.IntegerField()
+
     ingredients = models.TextField(null=True, blank=True)
     steps = models.TextField(null=True, blank=True)
-
     tips = models.TextField(null=True, blank=True)
+
     reference = models.TextField(null=True, blank=True)
+    reference_link = models.URLField(max_length=2048, null=True, blank=True)
+
     nutrients_person = models.FloatField(null=True, blank=True, default=0.0)
     nutrients_table = models.TextField(null=True, blank=True)
+
     expected_time_total = models.FloatField(null=True, blank=True, default=0.0)
     expected_time_work = models.FloatField(null=True, blank=True, default=0.0)
     expected_time_bake = models.FloatField(null=True, blank=True, default=0.0)
     expected_time_rest = models.FloatField(null=True, blank=True, default=0.0)
+
     difficulty = models.IntegerField(null=True, blank=True, default=0)
+
     image_meal = models.ImageField(blank=True, upload_to="recipes")
+    video_meal = models.URLField(max_length=2048, null=True, blank=True)
 
     rating_mean = models.FloatField(null=True, blank=True, default=0.0)
     rating_count = models.IntegerField(null=True, blank=True, default=0)

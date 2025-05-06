@@ -63,7 +63,11 @@ tr:nth-child(even) {
 
 <div class="main-container">
 <div class="main-middle-column">
-    <a href="{{request.META.HTTP_REFERER}}">Zurück</a><br>
+    <ul class="breadcrumb">
+        <li><a href="{{request.META.HTTP_REFERER}}">Zurück</a></li>
+        <li><a href="{% url 'recipes' %}">Rezepte</a></li>
+        <li>Rezept: {{ recipe.name }}</li>
+    </ul>
 
     <div class="recipe-container">
 
@@ -201,7 +205,7 @@ tr:nth-child(even) {
         {% endif %}
 
         <br>
-        <h2>User Bewertungen</h2>
+        <h2 id="user_ratings">User Bewertungen</h2>
         {% if recipe.rating_mean %}
             {% for i in '12345'|make_list  %}
                 {% if i|add:"0" <= recipe.rating_mean %}
@@ -297,7 +301,7 @@ tr:nth-child(even) {
 
     <div style="text-align:center;">
 
-    <form method="GET" action="{% url 'recipes' %}">
+    <form method="GET" action="#user_ratings">
         Seiten:
         {% if page_browser_show_back is not None %}
             <button type="submit" name="pgNr" value="{{page_browser_show_back}}">&larr; Zurück</button>
