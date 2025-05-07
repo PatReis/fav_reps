@@ -11,7 +11,7 @@ from .pagination import Pagination
 COOKING_DIFFICULTY_LOOKUP = {0: "einfach", 1: "mittel", 2: "schwer", 3: "profi"}
 
 
-def recipes(request):
+def recipes_grid(recipes_filter, request):
     q = request.GET.get('q') if request.GET.get('q') is not None else None
     pgNr = int(request.GET.get('pgNr')) if request.GET.get('pgNr') is not None else 0
     sortdir = {"Auf": "", "Ab": "-"}[request.GET.get('srtdir')] if request.GET.get('srtdir') is not None else ""
@@ -19,8 +19,6 @@ def recipes(request):
     tpc = request.GET.get('tpc') if request.GET.get('tpc') is not None else None
     pgShow = int(request.GET.get('pgShow')) if request.GET.get('pgShow') is not None else 50
 
-    max_recipes = Recipe.objects.count()
-    recipes_filter = Recipe.objects.all()
     topics = Topic.objects.all()
 
     if tpc is not None:
@@ -64,17 +62,29 @@ def recipes(request):
     browser_context = browser.make_page_browser(pgNr)
 
     sort_items = [["updated", "Geändert"], ["rating_mean", "Bewertung"], ["persons", "Personen"],
-                  ["created", "Erstellt"], ["difficulty", "Schwierigkeitsgrad"],  ["expected_time_total", "Gesamtzeit"],
+                  ["created", "Erstellt"], ["difficulty", "Schwierigkeitsgrad"], ["expected_time_total", "Gesamtzeit"],
                   ["nutrients_person", "Nährwert (pro Portion)"]]
 
     context = {"recipes": recipes,
-               "recipes_count": recipes_count, "max_recipes": max_recipes,
+               "recipes_count": recipes_count,
                "pgNr": pgNr, "num_pages": num_pages,
-               "topics": topics,
+               "topics": topics, "show_video": False,
                "sort_items": sort_items,
                "diff_lookup": COOKING_DIFFICULTY_LOOKUP}
     context.update(browser_context)
+    return context
+
+
+def recipes_overview(request):
+    context = recipes_grid(Recipe.objects.all(), request)
     return render(request, 'recipes_app/recipes.html', context)
+
+
+def recipes_video(request):
+    recipes_video = Recipe.objects.exclude(video_meal__isnull=True)
+    context = recipes_grid(recipes_video, request)
+    context.update({"show_video": True})
+    return render(request, 'recipes_app/recipes_video.html', context)
 
 
 def home(request):
@@ -92,6 +102,7 @@ def home(request):
                 "diff_lookup": COOKING_DIFFICULTY_LOOKUP,
     }
     return render(request, 'recipes_app/home.html', context)
+
 
 def recipe(request, pk):
     recipe_from_key = Recipe.objects.get(id=pk)

@@ -2,7 +2,7 @@
     <div class="grid-option-container">
         <div class="grid-option">
             <h3>Sortieren</h3>
-            <form method="GET" action="{% url 'recipes' %}">
+            <form method="GET" action="">
                 <select name="srtval" id="srtval">
                     {% for v, n in sort_items %}
                         {% if request.GET.srtval %}
@@ -30,7 +30,7 @@
         </div>
          <div class="grid-option">
             <h3>Filtern nach Kategorie</h3>
-            <form method="GET" action="{% url 'recipes' %}">
+            <form method="GET" action="">
                 <select name="tpc" id="tpc" size="1">
                     <option value=""> Keine </option>
                     {% for t in topics %}
@@ -54,7 +54,7 @@
         </div>
         <div class="grid-option">
             <h3>Rezepte pro Seite</h3>
-            <form method="GET" action="{% url 'recipes' %}">
+            <form method="GET" action="">
                 <button type="submit" value="10" name="pgShow">10</button>
                 <button type="submit" value="50" name="pgShow">50</button>
                 <button type="submit" value="50" name="pgShow">100</button>
@@ -81,11 +81,21 @@
     {% for recipe in recipes %}
         <div class="grid-item">
             <p>
-                {% if recipe.image_meal %}
-                <a href="{% url 'recipe' recipe.id %}"><img src="{{ recipe.image_meal.url }}" style="width: 100%; height: 100%;" ></a>
+                {% if show_video %}
+                    {% if recipe.image_meal %}
+                    <a href="{% url 'recipe' recipe.id %}?img=vid"><img src="{{ recipe.image_meal.url }}" style="width: 100%; height: 100%;" ></a>
+                    {% endif %}
+                {% else %}
+                    {% if recipe.image_meal %}
+                    <a href="{% url 'recipe' recipe.id %}"><img src="{{ recipe.image_meal.url }}" style="width: 100%; height: 100%;" ></a>
+                    {% endif %}
                 {% endif %}
             </p>
-            <a href="{% url 'recipe' recipe.id %}">{{recipe.name}}</a>
+            {% if show_video %}
+                <a href="{% url 'recipe' recipe.id %}?img=vid">{{recipe.name}}</a>
+            {% else %}
+                <a href="{% url 'recipe' recipe.id %}">{{recipe.name}}</a>
+            {% endif %}
             <p>
                 {% if recipe.rating_mean %}
                     {% for i in '12345'|make_list  %}
@@ -125,7 +135,7 @@
 <div class="card">
     <div class="grid-option" style="text-align:center;">
 
-    <form method="GET" action="{% url 'recipes' %}">
+    <form method="GET" action="">
         Seiten:
         {% if page_browser_show_back is not None %}
             <button type="submit" name="pgNr" value="{{page_browser_show_back}}">&larr; Zurück</button>
@@ -139,7 +149,7 @@
         {% for i in page_browser_choices_down %}
             <button type="submit" name="pgNr" value="{{i}}">{{i|add:"1"}}</button>
         {% endfor %}
-        <span class="button-display"><u>{{page_browser_current_index|add:"1"}}</u><span>
+        <span class="button-display"><u>{{page_browser_current_index|add:"1"}}</u></span>
         {% for i in page_browser_choices_up %}
             <button type="submit" name="pgNr" value="{{i}}">{{i|add:"1"}}</button>
         {% endfor %}

@@ -115,9 +115,32 @@ tr:nth-child(even) {
             {% endif %}
             ({{ recipe.rating_mean|default_if_none:"-" }}) and <span style="color:red;">&#10084;</span> ({{ likes_count }})
         </p>
-        {% if recipe.image_meal %}
-            <img src="{{ recipe.image_meal.url }}" style="width: auto; height: 300px; max-width: 100%;" >
+        <p id="img_display">
+        {% if request.GET.img == "vid" %}
+            {% if recipe.video_meal %}
+            <iframe width="420" height="315" style="max-width: 100%;"
+                src="{{recipe.video_meal}}">
+            </iframe>
+            {% endif %}
+        {% else %}
+            {% if recipe.image_meal %}
+                <img src="{{ recipe.image_meal.url }}" style="width: auto; height: 300px; max-width: 100%;" >
+            {% endif %}
         {% endif %}
+        </p>
+        <form method="GET" action="#img_display" >
+            {% if recipe.video_meal %}
+                <button type="submit" style="font-size:0.7em;" value="vid" name="img"> video </button>
+            {% elif recipe.image_meal %}
+                <button type="submit" style="font-size:0.75em;" value="img" name="img"> image </button>
+            {% endif %}
+            {% if request.GET.pgNr %}
+                <input type="hidden" name="pgNr" value="{{request.GET.pgNr|default_if_none:'0'}}"/>
+            {% endif %}
+            {% if request.GET.persons %}
+                <input type="hidden" name="persons" value="{{request.GET.persons|default_if_none:''}}"/>
+            {% endif %}
+        </form>
         <p>
              &#128337; Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min,
             Arbeitszeit: {{ recipe.expected_time_work|floatformat:"0"  }} min <br>
@@ -146,6 +169,12 @@ tr:nth-child(even) {
             <label for="id_persons">Personen:</label>
             <input type="number" id="id_persons" name="persons" min="1" max="100" value="{{required_persons}}">
             <input type="submit" value="Berechne" />
+            {% if request.GET.img %}
+                <input type="hidden" name="img" value="{{request.GET.img|default_if_none:'img'}}"/>
+            {% endif %}
+            {% if request.GET.pgNr %}
+                <input type="hidden" name="pgNr" value="{{request.GET.pgNr|default_if_none:'0'}}"/>
+            {% endif %}
             </form>
             <br>
             <table>
@@ -332,6 +361,9 @@ tr:nth-child(even) {
 
         {% if request.GET.persons %}
             <input type="hidden" name="persons" value="{{request.GET.persons|default_if_none:''}}"/>
+        {% endif %}
+        {% if request.GET.img %}
+            <input type="hidden" name="img" value="{{request.GET.img|default_if_none:'img'}}"/>
         {% endif %}
 
     </form>
