@@ -113,3 +113,20 @@ header {
     text-decoration: none;
     color: black;
 }
+
+.header-item > .header-icon {
+   display: inline-block;
+   font-size: 1.27em;
+   color: black;
+   text-decoration: none;
+}
+
+.header-item > .header-icon a {
+   color: black;
+   text-decoration: none;
+}
+
+.header-item > .header-icon img {
+   width: 3.0em;
+   height: 3.0em;
+}

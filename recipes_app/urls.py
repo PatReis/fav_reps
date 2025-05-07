@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.home, name="home"),
     path('recipes/', views.recipes_overview, name="recipes"),
     path('recipes-video/', views.recipes_video, name="recipes-video"),
+    path('recipes-likes/', views.recipes_likes, name="recipes-likes"),
 
     path('recipe/<str:pk>/', views.recipe, name="recipe"),
 

@@ -1,0 +1,46 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<style>
+    .span_green {
+        background-color:#8FBC8F;
+        border-radius: 5px;
+        padding-bottom: 2px;
+        padding-top: 2px;
+    }
+</style>
+
+<div class="main-container">
+
+    <div class="main-middle-column">
+        <ul class="breadcrumb">
+          <li><a href="{{request.META.HTTP_REFERER}}">Zurück</a></li>
+          <li>Benutzer Likes</li>
+        </ul>
+
+        <div class="card">
+            <h2>Mein Kochbuch</h2>
+            <p>Überprüfe hier deine Lieblingsrezepte und erstelle dein Kochbuch.</p>
+            <p>Du hast {{request.user.likes.all.count|default_if_none:"0"}} Rezepte geliked.</p>
+            <search>
+                <form method="GET" action="{% url 'recipes-likes' %}">
+                      <input type="text" name="q" placeholder="Suche ..."
+                        {% if request.GET.q %}
+                            value="{{request.GET.q|default_if_none:''}}"
+                        {% endif %}
+                      />
+                </form>
+            </search>
+        </div>
+        <div style="text-align: right;">
+             <a href="{% url 'create-recipe' %}" class="button-like">&#9993; Kochbuch erstellen </a>
+        </div>
+
+        {% include 'recipes_app/recipes_grid.html' %}
+
+    </div>
+
+</div>
+
+{% endblock content %}

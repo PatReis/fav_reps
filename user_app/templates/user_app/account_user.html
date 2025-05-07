@@ -21,7 +21,7 @@
             <li><a href="{% url 'user-update' %}">Angaben ergänzen<a></li>
             <li><a href="{% url 'user-profile' user.id %}">User Seite ansehen<a></li>
             <li><a href="{% url 'recipes' %}?q={{user.username|urlencode}}">Meine Rezepte</a></li>
-            <li>Meine Likes</li>
+            <li><a href="{% url 'recipes-likes' %}">Meine Likes</a></li>
             <li>Meine Bewertungen</li>
             <li><a href="/api/recipes">Export meiner Rezepte</a></li>
             <li><a href="/api/topics">Export Topics</a></li>

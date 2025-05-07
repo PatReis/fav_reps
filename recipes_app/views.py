@@ -87,6 +87,13 @@ def recipes_video(request):
     return render(request, 'recipes_app/recipes_video.html', context)
 
 
+@login_required(login_url='user-login-required')
+def recipes_likes(request):
+    recipes_liked = request.user.likes.all()
+    context = recipes_grid(recipes_liked, request)
+    return render(request, 'recipes_app/recipes_likes.html', context)
+
+
 def home(request):
     max_recipes = Recipe.objects.count()
     recipes_latest = Recipe.objects.all()[:6]
