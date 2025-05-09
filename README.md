@@ -29,20 +29,26 @@ Topics are to be created by the admin ``python manage.py createsuperuser`` . And
 Example of the website.
 
 <p align="center">
-  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_1.jpg" width="80%"/>
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_1.jpg" />
 </p>
+<hr>
 <p align="center">
-  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_2.jpg" width="80%" />
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_2.jpg" />
 </p>
+<hr>
 <p align="center">
-  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_3.jpg" width="80%" />
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_3.jpg" />
 </p>
+<hr>
 <p align="center">
-  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_4.jpg" width="80%" />
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_4.jpg" />
 </p>
+<hr>
 <p align="center">
-  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_5.jpg" width="80%" />
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_5.jpg" />
 </p>
+<hr>
 <p align="center">
-  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_6.jpg" width="80%" />
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_6.jpg" />
 </p>
+
