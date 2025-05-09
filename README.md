@@ -20,19 +20,29 @@ And start the test-server on `http://127.0.0.1:8000/` with ``python manage.py ru
 
 ## Features
 
-You can upload your recipes in a form to separate entries like ingredients, cooking time, image etc.
-The recipes can be searched, sorted and also filtered by their assigned topics. They are rendered in an HTML template from the database with ingredients calculated based on the number of persons.
+You can upload your recipes, rate and like them and generate your personal cooking book.
+You can discuss cooking in a forum tab and link videos to your recipe. 
+The recipes can be searched, sorted and also filtered by their topics. 
 Topics are to be created by the admin ``python manage.py createsuperuser`` . And by visiting the `/admin` url.
-You can also access/export the database via REST API at url `/api` and `/api/recipes` in json format.  
+
 
 Example of the website.
 
 <p align="center">
-  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_6.jpg" />
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_1.jpg" width="80%"/>
 </p>
 <p align="center">
-  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_4.jpg" />
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_2.jpg" width="80%" />
 </p>
 <p align="center">
-  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_5.jpg" />
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_3.jpg" width="80%" />
+</p>
+<p align="center">
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_4.jpg" width="80%" />
+</p>
+<p align="center">
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_5.jpg" width="80%" />
+</p>
+<p align="center">
+  <img src="https://github.com/PatReis/fav_reps/blob/main/static/images/example_6.jpg" width="80%" />
 </p>

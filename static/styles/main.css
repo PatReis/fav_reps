@@ -141,6 +141,16 @@ button:hover, input[type=submit]:hover, .button-like:hover {
     text-align: center;
 }
 
+.room-container{
+    background-color: white;
+    padding: 1em 1em 1em 2em;
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 0.15em;
+    border-color: #ddd;
+    margin: 0.25em;
+}
+
 /* Footer */
 .footer {
     display: flex;

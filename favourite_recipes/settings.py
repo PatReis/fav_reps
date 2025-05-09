@@ -38,6 +38,7 @@ AUTH_USER_MODEL = 'user_app.User'
 INSTALLED_APPS = [
     'recipes_app.apps.RecipesAppConfig',
     'user_app.apps.UserAppConfig',
+    'forum_app.apps.ForumAppConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',

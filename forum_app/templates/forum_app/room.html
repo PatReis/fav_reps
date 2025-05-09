@@ -1,0 +1,143 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<style>
+    .span_green {
+        background-color:#8FBC8F;
+        border-radius: 5px;
+        padding-bottom: 2px;
+        padding-top: 2px;
+    }
+    .room-container {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+    }
+    input[type=text] {
+       width: 30em;
+       max-width: 100%;
+    }
+</style>
+
+
+<div class="main-container">
+
+    <div class="main-middle-column">
+        <ul class="breadcrumb">
+          <li><a href="{{request.META.HTTP_REFERER}}">Zurück</a></li>
+          <li><a href="{% url 'rooms' %}">Forum</a></li>
+          <li>Unterhaltung: {{room.name}} </li>
+        </ul>
+
+
+            <div>
+
+                <h1>{{room.name}}</h1>
+                <p><span class="span_green">{{room.topic.name}}</span></p>
+
+                {% if request.user.is_authenticated %}
+                {% if request.user == room.host %}
+                <div style="text-align:right;">
+                    <a href="{% url 'update-room' room.id %}" class="button-like" style="font-size:1em;"> &#9998; Bearbeiten </a>
+                    <a href="{% url 'delete-room' room.id %}" class="button-like" style="font-size:1em;">Thema Löschen</a>
+                </div>
+                {% endif %}
+                {% endif %}
+
+                <p>{{room.description}}</p>
+
+                {% if request.user.is_authenticated %}
+                <div class="comment-form">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input type="text" name="body" placeholder="Schreibe einen Kommentar..." />
+                    </form>
+                </div>
+                {% endif %}
+                <br><br>
+
+                <div class="comment-wrapper">
+                    <h3>Beiträge</h3>
+                    <hr>
+
+                    {% for message in room_messages %}
+                    <div>
+                        {% if request.user == message.user %}
+                            <a href="{% url 'delete-message' message.id %}" class="button-like" style="font-size:1em;">Löschen</a>
+                        {% endif %}
+                        <small>von {{message.user.username}} vor {{message.created|timesince}} </small>
+                        <p>{{message.body}}</p>
+                        <hr>
+                    </div>
+                    {% endfor %}
+                </div>
+
+
+            </div>
+
+        <div class="card">
+        <div class="grid-option" style="text-align:center;">
+
+        <form method="GET" action="">
+            Seiten:
+            {% if page_browser_show_back is not None %}
+                <button type="submit" name="pgNr" value="{{page_browser_show_back}}">&larr; Zurück</button>
+            {% endif %}
+            {% if page_browser_show_start is not None %}
+                <button type="submit" name="pgNr" value="{{page_browser_show_start}}">{{page_browser_show_start|add:"1"}}</button>
+            {% endif %}
+            {% if page_browser_show_start_dots %}
+                ...
+            {% endif %}
+            {% for i in page_browser_choices_down %}
+                <button type="submit" name="pgNr" value="{{i}}">{{i|add:"1"}}</button>
+            {% endfor %}
+            <span class="button-display"><u>{{page_browser_current_index|add:"1"}}</u></span>
+            {% for i in page_browser_choices_up %}
+                <button type="submit" name="pgNr" value="{{i}}">{{i|add:"1"}}</button>
+            {% endfor %}
+            {% if page_browser_show_stop_dots %}
+                ...
+            {% endif %}
+            {% if page_browser_show_stop is not None %}
+                <button type="submit" name="pgNr" value="{{page_browser_show_stop}}">{{page_browser_show_stop|add:"1"}}</button>
+            {% endif %}
+            {% if page_browser_show_next is not None %}
+                <button type="submit" name="pgNr" value="{{page_browser_show_next}}">Weiter &rarr;</button>
+            {% endif %}
+            <!-- Hidden input -->
+            {% if request.GET.q %}
+                <input type="hidden" name="q" value="{{request.GET.q|default_if_none:''}}"/>
+            {% endif %}
+            {% if request.GET.srtdir %}
+                <input type="hidden" name="srtdir" value="{{request.GET.srtdir|default_if_none:''}}"/>
+            {% endif %}
+            {% if request.GET.srtval %}
+                <input type="hidden" name="srtval" value="{{request.GET.srtval|default_if_none:''}}"/>
+            {% endif %}
+            {% if request.GET.tpc %}
+                <input type="hidden" name="tpc" value="{{request.GET.tpc|default_if_none:''}}"/>
+            {% endif %}
+        </form>
+        </div>
+    </div>
+
+    </div>
+    <div class="main-right-column">
+            <div>
+                <h3>Teilnehmer</h3>
+                <hr>
+                <p>
+                {% for user in participants %}
+
+                    <a href="{% url 'user-profile' user.id %}"><span>{{user.username}}</span></a>
+
+                {% endfor %}
+                </p>
+            </div>
+
+
+    </div>
+</div>
+
+{% endblock %}

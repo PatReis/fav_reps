@@ -1,0 +1,25 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="main-container">
+<div class="main-middle-column" style="margin-bottom:20em;">
+
+    <ul class="breadcrumb">
+        <li><a href="{{request.META.HTTP_REFERER}}">Zurück</a></li>
+        <li><a href="{% url 'rooms' %}">Forum</a></li>
+        <li>Löschen</li>
+    </ul>
+
+    <h1>Löschen</h1>
+    <form method="POST" action="">
+    {% csrf_token %}
+    <p>Sind Sie sicher, dass Sie diesen Forenbeitrag löschen wollen: "{{obj}}"?</p>
+
+    <a href="{{request.META.HTTP_REFERER}}" class="button-like">Nein, Zurück</a>
+    <input type="submit" value="Ja, bestätige." />
+</form>
+</div>
+</div>
+
+{% endblock content %}

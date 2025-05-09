@@ -97,7 +97,7 @@ def recipes_likes(request):
 def home(request):
     max_recipes = Recipe.objects.count()
     recipes_latest = Recipe.objects.all()[:6]
-    recipes_best = Recipe.objects.all()[:6]
+    recipes_best = Recipe.objects.order_by("-rating_mean")[:6]
     topics = Topic.objects.all()
     recipes = Recipe.objects.all()
 

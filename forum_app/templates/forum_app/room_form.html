@@ -1,0 +1,39 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<style>
+    textarea {
+        vertical-align: top;
+        width: 100%;
+        background-color: white;
+    }
+    .card input {
+        width: 100%;
+    }
+    select {
+        max-width: 100%;
+    }
+</style>
+
+<div class="main-container">
+
+    <div class="main-middle-column" style="margin-bottom:10em;">
+        <ul class="breadcrumb">
+            <li><a href="{{request.META.HTTP_REFERER}}">Zurück</a></li>
+            <li><a href="{% url 'rooms' %}">Forum</a></li>
+            <li>Neue Unterhaltung</li>
+        </ul>
+
+        <div>
+            <form method="POST" action="">
+                {% csrf_token %}
+                {{form.as_p}}
+                <input type="submit" value="Submit" />
+            </form>
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}

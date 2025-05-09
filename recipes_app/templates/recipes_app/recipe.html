@@ -130,9 +130,9 @@ tr:nth-child(even) {
         </p>
         <form method="GET" action="#img_display" >
             {% if recipe.video_meal %}
-                <button type="submit" style="font-size:0.7em;" value="vid" name="img"> video </button>
+                <button type="submit" style="font-size:0.7em;" value="vid" name="img"> Video </button>
             {% elif recipe.image_meal %}
-                <button type="submit" style="font-size:0.75em;" value="img" name="img"> image </button>
+                <button type="submit" style="font-size:0.75em;" value="img" name="img"> Bild </button>
             {% endif %}
             {% if request.GET.pgNr %}
                 <input type="hidden" name="pgNr" value="{{request.GET.pgNr|default_if_none:'0'}}"/>

@@ -10,34 +10,35 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('forum_app', '0001_initial'),
         ('recipes_app', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='rating',
+            model_name='message',
             name='user',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='recipe',
-            name='likes',
-            field=models.ManyToManyField(blank=True, related_name='likes', to=settings.AUTH_USER_MODEL),
-        ),
-        migrations.AddField(
-            model_name='recipe',
-            name='owner',
+            model_name='room',
+            name='host',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='rating',
-            name='recipe',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='recipes_app.recipe'),
+            model_name='room',
+            name='participants',
+            field=models.ManyToManyField(blank=True, related_name='participants', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='recipe',
+            model_name='room',
             name='topic',
-            field=models.ManyToManyField(blank=True, to='recipes_app.topic'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='recipes_app.topic'),
+        ),
+        migrations.AddField(
+            model_name='message',
+            name='room',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='forum_app.room'),
         ),
     ]
