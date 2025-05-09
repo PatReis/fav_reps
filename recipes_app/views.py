@@ -77,6 +77,7 @@ def recipes_grid(recipes_filter, request):
 
 def recipes_overview(request):
     context = recipes_grid(Recipe.objects.all(), request)
+    context["recipe_scr"] = "recipes"
     return render(request, 'recipes_app/recipes.html', context)
 
 
@@ -84,6 +85,7 @@ def recipes_video(request):
     recipes_video = Recipe.objects.exclude(video_meal__isnull=True)
     context = recipes_grid(recipes_video, request)
     context.update({"show_video": True})
+    context["recipe_scr"] = "videos"
     return render(request, 'recipes_app/recipes_video.html', context)
 
 
@@ -91,6 +93,7 @@ def recipes_video(request):
 def recipes_likes(request):
     recipes_liked = request.user.likes.all()
     context = recipes_grid(recipes_liked, request)
+    context["recipe_scr"] = "likes"
     return render(request, 'recipes_app/recipes_likes.html', context)
 
 

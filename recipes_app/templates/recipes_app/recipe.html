@@ -65,7 +65,13 @@ tr:nth-child(even) {
 <div class="main-middle-column">
     <ul class="breadcrumb">
         <li><a href="{{request.META.HTTP_REFERER}}">Zurück</a></li>
-        <li><a href="{% url 'recipes' %}">Rezepte</a></li>
+        {% if request.GET.srcurl == 'likes'%}
+            <li><a href="{% url 'recipes-likes' %}">Benutzer Likes</a></li>
+        {% elif request.GET.srcurl == 'videos' %}
+            <li><a href="{% url 'recipes-video' %}">Videos</a></li>
+        {% else %}
+            <li><a href="{% url 'recipes' %}">Rezepte</a></li>
+        {% endif %}
         <li>Rezept: {{ recipe.name }}</li>
     </ul>
 
@@ -140,6 +146,9 @@ tr:nth-child(even) {
             {% if request.GET.persons %}
                 <input type="hidden" name="persons" value="{{request.GET.persons|default_if_none:''}}"/>
             {% endif %}
+            {% if request.GET.srcurl %}
+                <input type="hidden" name="srcurl" value="{{request.GET.srcurl|default_if_none:''}}"/>
+            {% endif %}
         </form>
         <p>
              &#128337; Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min,
@@ -174,6 +183,9 @@ tr:nth-child(even) {
             {% endif %}
             {% if request.GET.pgNr %}
                 <input type="hidden" name="pgNr" value="{{request.GET.pgNr|default_if_none:'0'}}"/>
+            {% endif %}
+            {% if request.GET.srcurl %}
+                <input type="hidden" name="srcurl" value="{{request.GET.srcurl|default_if_none:''}}"/>
             {% endif %}
             </form>
             <br>
@@ -365,7 +377,9 @@ tr:nth-child(even) {
         {% if request.GET.img %}
             <input type="hidden" name="img" value="{{request.GET.img|default_if_none:'img'}}"/>
         {% endif %}
-
+        {% if request.GET.srcurl %}
+            <input type="hidden" name="srcurl" value="{{request.GET.srcurl|default_if_none:''}}"/>
+        {% endif %}
     </form>
     </div>
 
