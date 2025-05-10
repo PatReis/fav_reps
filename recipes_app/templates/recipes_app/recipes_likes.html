@@ -21,7 +21,7 @@
 
         <div class="card">
             <h2>Mein Kochbuch</h2>
-            <p>Überprüfe hier deine Lieblingsrezepte und erstelle dein Kochbuch.</p>
+            <p>Überprüfe hier deine Lieblingsrezepte und erstelle dein Kochbuch. Erzeugtes Kochbuch einfach als PrintToPDF drucken.</p>
             <p>Du hast {{request.user.likes.all.count|default_if_none:"0"}} Rezepte geliked.</p>
             <search>
                 <form method="GET" action="{% url 'recipes-likes' %}">
@@ -34,7 +34,7 @@
             </search>
         </div>
         <div style="text-align: right;">
-             <a href="{% url 'create-recipe' %}" class="button-like">&#9993; Kochbuch erstellen </a>
+             <a href="{% url 'recipes-book' %}" class="button-like" target="_blank">&#9993; Kochbuch erstellen </a>
         </div>
 
         {% include 'recipes_app/recipes_grid.html' %}

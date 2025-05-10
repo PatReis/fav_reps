@@ -10,6 +10,8 @@ urlpatterns = [
     path('recipes-video/', views.recipes_video, name="recipes-video"),
     path('recipes-likes/', views.recipes_likes, name="recipes-likes"),
 
+    path('recipes-book/', views.recipes_book, name="recipes-book"),
+
     path('recipe/<str:pk>/', views.recipe, name="recipe"),
 
     path('create-recipe/', views.createRecipe, name="create-recipe"),

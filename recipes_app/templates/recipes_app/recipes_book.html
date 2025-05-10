@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Kuchbuch</title>
+
+<style>
+body {
+    font-size: 10px;
+    background-color: white;
+    counter-reset: section;
+}
+h1 {
+    font-size: 32px;
+    counter-reset: section;
+}
+h2 {
+    font-size: 16px;
+    counter-reset: section;
+    column-span: all;
+}
+h3::before {
+    counter-increment: section;
+    content: counter(section) ". ";
+}
+a::before {
+    counter-increment: section;
+    content: counter(section) ". ";
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>Lieblingsrezepte</h1>
+<p style="font-size:16px;">Rezeptauswahl von {{request.user.name}} <br> vom {% now "" %} </p>
+
+<div style="column-count:3;margin-bottom:64px">
+{% for recipe in recipes %}
+    <h3 id="{{recipe.id}}" >{{recipe.name}}</h3>
+
+    <p>
+        Bewertung:
+        {% if recipe.rating_mean %}
+            {% for i in '12345'|make_list  %}
+                {% if i|add:"0" <= recipe.rating_mean %}
+                    <span style='color:#f1c40f'>&#9733;</span>
+                {% else %}
+                    <span style='color:#ccd1d1'>&#9733;</span>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <span style='color:#ccd1d1'>&#9733; &#9733; &#9733; &#9733; &#9733;</span>
+        {% endif %}
+        ({{ recipe.rating_mean|default_if_none:"-" }}), Gesamtzeit: {{ recipe.expected_time_total|floatformat:"0" }} min,
+        Schwierigkeit:
+        {% if recipe.difficulty in diff_lookup %}
+            {% for key, value in diff_lookup.items %}
+            {% if key == recipe.difficulty %}
+                {{value}}
+            {% endif %}
+            {% endfor %}
+        {% else %}
+            Grad {{ recipe.difficulty|default_if_none:"-" }}
+        {% endif%},
+        Kalorien: {{ recipe.nutrients_person|default_if_none:"-" }} kcal
+    </p>
+    <div style="text-align:center">
+        <img src="{{ recipe.image_meal.url }}" style="width:65%;" >
+    </div>
+    <p>
+        <strong>Zutaten</strong> für {{recipe.persons}} Personen: <br>
+        {{recipe.ingredients_trimmed}}
+    </p>
+    <p>
+         <strong>Zubereitung:</strong> <br>
+        {{recipe.steps|escape|linebreaksbr}}
+
+        {% if recipe.tips %}
+        <br>
+            <i>Info</i>: {{recipe.tips|escape}}
+        {% endif %}
+    </p>
+{% endfor %}
+</div>
+
+
+<div style="column-count:3;">
+    <h2>Inhaltsverzeichnis</h2>
+    {% for recipe in recipes %}
+    <a href="#{{recipe.id}}">{{recipe.name}}</a> <br>
+    {% endfor %}
+</div>
+
+
+</body>
+
+</html>

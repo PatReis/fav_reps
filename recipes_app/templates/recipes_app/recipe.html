@@ -200,18 +200,18 @@ tr:nth-child(even) {
         <br>
         <h3>Zubereitung:</h3>
         <div style="text-align: left; display: inline-block; width: 100%">
-        <p>{{ recipe.steps|linebreaks  }}</p>
+        <p>{{ recipe.steps|escape|linebreaks  }}</p>
         </div>
         <br>
         <h3>Tipps:</h3>
         <div style="text-align: left; display: inline-block; width: 100%">
-        <p>{{ recipe.tips|linebreaks  }}</p>
+        <p>{{ recipe.tips|escape|linebreaks  }}</p>
         </div>
         <br>
 
         <h3>Nährwerte pro Person:</h3>
         <p>
-            {{ recipe.nutrients_table|linebreaks  }}
+            {{ recipe.nutrients_table|escape|linebreaks  }}
         </p>
 
         <br>

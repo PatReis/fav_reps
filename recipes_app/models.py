@@ -54,6 +54,10 @@ class Recipe(models.Model):
     rating_4 = models.IntegerField(null=True, blank=True, default=0)
     rating_5 = models.IntegerField(null=True, blank=True, default=0)
 
+    @property
+    def ingredients_trimmed(self):
+        return self.ingredients.replace('\r\n', '\n').replace('\n', ' | ')
+
     class Meta:
         ordering = ['-updated', '-created']
 

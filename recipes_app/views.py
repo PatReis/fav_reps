@@ -97,6 +97,14 @@ def recipes_likes(request):
     return render(request, 'recipes_app/recipes_likes.html', context)
 
 
+@login_required(login_url='user-login-required')
+def recipes_book(request):
+    recipes_liked = request.user.likes.all()
+    recipes_liked = recipes_liked.order_by("name")
+    context = {"recipes": recipes_liked, "diff_lookup": COOKING_DIFFICULTY_LOOKUP}
+    return render(request, 'recipes_app/recipes_book.html', context)
+
+
 def home(request):
     max_recipes = Recipe.objects.count()
     recipes_latest = Recipe.objects.all()[:6]
